@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale>
+    <backend>
+        <core>
+            <item type="label" name="Slideshows">
+                <translation language="nl"><![CDATA[slideshows]]></translation>
+                <translation language="en"><![CDATA[slideshows]]></translation>
+                <translation language="fr"><![CDATA[slideshows]]></translation>
+            </item>
+        </core>
+        <slideshows>
+            <item type="label" name="Link">
+                <translation language="nl"><![CDATA[link]]></translation>
+                <translation language="en"><![CDATA[link]]></translation>
+                <translation language="fr"><![CDATA[lien]]></translation>
+            </item>
+        </slideshows>
+    </backend>
+</locale>
