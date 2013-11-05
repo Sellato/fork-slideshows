@@ -117,8 +117,8 @@ class BackendSlideshowsEdit extends BackendBaseActionEdit
 
                 BackendSlideshowsModel::update($item);
 
-                $data = array('id' => $this->id, 'extra_label' => $item['title']);
-                BackendModel::getContainer()->get('database')->update('modules_extras', array('data' => serialize($data), 'language' => $item['language']), 'id = ?', $this->record['extra_id']);
+                $data = array('id' => $this->id, 'extra_label' => $item['title'], 'language' => $item['language']);
+                BackendModel::getContainer()->get('database')->update('modules_extras', array('data' => serialize($data)), 'id = ?', $this->record['extra_id']);
 
 				// everything is saved, so redirect to the overview
 				$this->redirect(BackendModel::createURLForAction('index') . '&report=edited&var=' . urlencode($item['title']) . '&id=' . $this->id . '&highlight=row-' . $item['id']);
