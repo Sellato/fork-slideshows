@@ -14,32 +14,33 @@
  */
 class BackendSlideshowsDeleteSlide extends BackendBaseActionDelete
 {
-	/**
-	 * Execute the action
-	 */
-	public function execute()
-	{
-		$this->id = $this->getParameter('id', 'int');
+    /**
+     * Execute the action
+     */
+    public function execute()
+    {
+        $this->id = $this->getParameter('id', 'int');
 
-		// group exists and id is not null?
-		if($this->id !== null && BackendSlideshowsModel::existsSlide($this->id))
-		{
-			parent::execute();
+        // group exists and id is not null?
+        if ($this->id !== null && BackendSlideshowsModel::existsSlide($this->id)) {
+            parent::execute();
 
-			// get record
-			$this->record = BackendSlideshowsModel::getSlide($this->id);
+            // get record
+            $this->record = BackendSlideshowsModel::getSlide($this->id);
 
-			// delete group
+            // delete group
             BackendSlideshowsModel::deleteSlide($this->id);
 
-			// trigger event
-			BackendModel::triggerEvent($this->getModule(), 'after_delete', array('id' => $this->id));
+            // trigger event
+            BackendModel::triggerEvent($this->getModule(), 'after_delete', array('id' => $this->id));
 
-			// item was deleted, so redirect
-			$this->redirect(BackendModel::createURLForAction('edit') . '&id=' . $this->record['slideshow_id'] . '&report=deleted&var=' . urlencode($this->record['name']));
-		}
+            // item was deleted, so redirect
+            $this->redirect(BackendModel::createURLForAction('edit') . '&id=' . $this->record['slideshow_id'] . '&report=deleted&var=' . urlencode($this->record['name']));
+        }
 
-		// no item found, redirect to the overview with an error
-		else $this->redirect(BackendModel::createURLForAction('index') . '&error=non-existing');
-	}
+        // no item found, redirect to the overview with an error
+        else {
+            $this->redirect(BackendModel::createURLForAction('index') . '&error=non-existing');
+        }
+    }
 }

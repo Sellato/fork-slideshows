@@ -33,8 +33,10 @@ class BackendSlideshowsIndex extends BackendBaseActionIndex
         $this->dataGrid = new BackendDataGridDB(BackendSlideshowsModel::QRY_BROWSE, BL::getWorkingLanguage());
 
         $this->dataGrid->setColumnURL('title', BackendModel::createURLForAction('edit') . '&amp;id=[id]');
-        $this->dataGrid->setColumnFunction(array('BackendDataGridFunctions', 'getLongdate'), array('[created_on]'), 'created_on');
-        $this->dataGrid->addColumn('edit', null, BL::lbl('Edit'), BackendModel::createURLForAction('edit') . '&amp;id=[id]');
+        $this->dataGrid->setColumnFunction(array('BackendDataGridFunctions', 'getLongdate'), array('[created_on]'),
+            'created_on');
+        $this->dataGrid->addColumn('edit', null, BL::lbl('Edit'),
+            BackendModel::createURLForAction('edit') . '&amp;id=[id]');
     }
 
     /**
@@ -44,6 +46,8 @@ class BackendSlideshowsIndex extends BackendBaseActionIndex
     {
         parent::parse();
 
-        if($this->dataGrid->getContent() != '') $this->tpl->assign('dataGrid', $this->dataGrid->getContent());
+        if ($this->dataGrid->getContent() != '') {
+            $this->tpl->assign('dataGrid', $this->dataGrid->getContent());
+        }
     }
 }

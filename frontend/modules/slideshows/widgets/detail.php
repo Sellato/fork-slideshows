@@ -10,7 +10,7 @@ class FrontendSlideshowsWidgetDetail extends FrontendBaseWidget
     /**
      * The item.
      *
-     * @var	array
+     * @var    array
      */
     private $item;
 

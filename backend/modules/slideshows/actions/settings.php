@@ -47,10 +47,10 @@ class BackendSlideshowsSettings extends BackendBaseActionEdit
         // submitted?
         if ($this->frm->isSubmitted()) {
             // validation
-            if($this->frm->getField('slide_width')->isFilled()) {
+            if ($this->frm->getField('slide_width')->isFilled()) {
                 $this->frm->getField('slide_width')->isInteger(BL::err('InvalidInteger'));
             }
-            if($this->frm->getField('slide_height')->isFilled()) {
+            if ($this->frm->getField('slide_height')->isFilled()) {
                 $this->frm->getField('slide_height')->isInteger(BL::err('InvalidInteger'));
             }
 

@@ -30,8 +30,8 @@ class BackendSlideshowsEdit extends BackendBaseActionEdit
 			$this->getData();
 			$this->loadForm();
 			$this->validateForm();
-			$this->parse();
-			$this->display();
+            $this->parse();
+            $this->display();
 		}
 		// no item found, throw an exception, because somebody is fucking with our URL
 		else $this->redirect(BackendModel::createURLForAction('index') . '&error=non-existing');
