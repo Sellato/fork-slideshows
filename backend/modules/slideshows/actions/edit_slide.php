@@ -14,6 +14,13 @@
  */
 class BackendSlideshowsEditSlide extends BackendBaseActionEdit
 {
+    /**
+     * Slide dimensions
+     *
+     * @var int
+     */
+    private $slideWidth, $slideHeight;
+
 	/**
 	 * Execute the action
 	 */
@@ -46,6 +53,10 @@ class BackendSlideshowsEditSlide extends BackendBaseActionEdit
 
 		// no item found, throw an exceptions, because somebody is fucking with our URL
 		if(empty($this->record)) $this->redirect(BackendModel::createURLForAction('index') . '&error=non-existing');
+
+        // get dimensions
+        $this->slideWidth = (int) BackendModel::getModuleSetting('slideshows', 'slide_width', null);
+        $this->slideHeight = (int) BackendModel::getModuleSetting('slideshows', 'slide_height', null);
 	}
 
 	/**
@@ -71,6 +82,19 @@ class BackendSlideshowsEditSlide extends BackendBaseActionEdit
 		parent::parse();
 		// assign the active record and additional variables
 		$this->tpl->assign('item', $this->record);
+
+        // help text
+        $helpImageDimensions = '';
+        if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
+        }
+        elseif ($this->slideWidth !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsWidth'), $this->slideWidth);
+        }
+        elseif ($this->slideHeight !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsHeight'), $this->slideHeight);
+        }
+        $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
 	}
 
 	/**
@@ -89,6 +113,24 @@ class BackendSlideshowsEditSlide extends BackendBaseActionEdit
 
 			// validate fields
 			$this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
+            if ($this->frm->getField('image')->isFilled()) {
+                // check dimensions
+                if($this->slideWidth !== 0 && $this->slideHeight !== 0) {
+                    if($this->frm->getField('image')->getWidth() != $this->slideWidth && $this->frm->getField('image')->getHeight() != $this->slideHeight) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongDimensions'), $this->slideWidth, $this->slideHeight));
+                    }
+                }
+                elseif($this->slideWidth !== 0) {
+                    if($this->frm->getField('image')->getWidth() != $this->slideWidth) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongWidth'), $this->slideWidth));
+                    }
+                }
+                elseif($this->slideHeight !== 0) {
+                    if($this->frm->getField('image')->getHeight() != $this->slideHeight) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongHeight'), $this->slideHeight));
+                    }
+                }
+            }
 
 
 			// no errors?

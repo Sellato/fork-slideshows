@@ -14,6 +14,51 @@
                 <translation language="en"><![CDATA[link]]></translation>
                 <translation language="fr"><![CDATA[lien]]></translation>
             </item>
+            <item type="label" name="Slides">
+                <translation language="nl"><![CDATA[slides]]></translation>
+                <translation language="en"><![CDATA[slides]]></translation>
+                <translation language="fr"><![CDATA[diapositives]]></translation>
+            </item>
+            <item type="label" name="SlideWidth">
+                <translation language="nl"><![CDATA[slide breedte]]></translation>
+                <translation language="en"><![CDATA[slide width]]></translation>
+                <translation language="fr"><![CDATA[largeur de diapositive]]></translation>
+            </item>
+            <item type="label" name="SlideHeight">
+                <translation language="nl"><![CDATA[slide hoogte]]></translation>
+                <translation language="en"><![CDATA[slide height]]></translation>
+                <translation language="fr"><![CDATA[hauteur de diapositive]]></translation>
+            </item>
+            <item type="error" name="WrongDimensions">
+                <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde dimensies, moet %1$sx%2$spx zijn.]]></translation>
+                <translation language="en"><![CDATA[The image has the wrong dimensions, should be %1$sx%2$spx.]]></translation>
+                <translation language="fr"><![CDATA[L'image a de mauvaises dimensions, devrait être %1$sx%2$spx.]]></translation>
+            </item>
+            <item type="error" name="WrongWidth">
+                <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde breedte, moet %1$spx zijn.]]></translation>
+                <translation language="en"><![CDATA[The image has the wrong width, should be %1$spx.]]></translation>
+                <translation language="fr"><![CDATA[L'image a la mauvaise largeur, devrait être %1$spx.]]></translation>
+            </item>
+            <item type="error" name="WrongHeight">
+                <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde hoogte, moet %1$spx zijn.]]></translation>
+                <translation language="en"><![CDATA[The image has the wrong height, should be %1$spx.]]></translation>
+                <translation language="fr"><![CDATA[L'image a la mauvaise hauteur, devrait être %1$spx.]]></translation>
+            </item>
+            <item type="message" name="HelpImageDimensions">
+                <translation language="nl"><![CDATA[De afbeelding moet %1$sx%2$spx zijn.]]></translation>
+                <translation language="en"><![CDATA[The image should be %1$sx%2$spx.]]></translation>
+                <translation language="fr"><![CDATA[L'image doit être %1$sx%2$spx.]]></translation>
+            </item>
+            <item type="message" name="HelpImageDimensionsWidth">
+                <translation language="nl"><![CDATA[De afbeelding moet %1$spx breed zijn.]]></translation>
+                <translation language="en"><![CDATA[The image should be %1$spx wide.]]></translation>
+                <translation language="fr"><![CDATA[L'image doit être %1$spx de large.]]></translation>
+            </item>
+            <item type="message" name="HelpImageDimensionsHeight">
+                <translation language="nl"><![CDATA[De afbeelding moet %1$spx hoog zijn.]]></translation>
+                <translation language="en"><![CDATA[The image should be %1$spx high.]]></translation>
+                <translation language="fr"><![CDATA[L'image doit être %1$spx haut.]]></translation>
+            </item>
         </slideshows>
     </backend>
 </locale>

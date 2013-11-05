@@ -14,6 +14,7 @@
         <div class="options">
            <p>
                <label for="image">{$lblImage|ucfirst}</label>
+               <span class="helpTxt">{$helpImageDimensions}</span>
                {$fileImage} {$fileImageError}
                <img src="{$item.image_preview}" />
            </p>

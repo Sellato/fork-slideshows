@@ -14,6 +14,13 @@
  */
 class BackendSlideshowsAddSlide extends BackendBaseActionAdd
 {
+    /**
+     * Slide dimensions
+     *
+     * @var int
+     */
+    private $slideWidth, $slideHeight;
+
 	/**
 	 * Execute the action
 	 */
@@ -24,11 +31,24 @@ class BackendSlideshowsAddSlide extends BackendBaseActionAdd
         $slideshowId = SpoonFilter::getGetValue('slideshow', null, null);
         if($slideshowId == null || !BackendSlideshowsModel::exists($slideshowId)) $this->redirect(BackendModel::createURLForAction('index') . '&error=non-existing');
 
+        $this->getData();
 		$this->loadForm();
 		$this->validateForm();
 		$this->parse();
 		$this->display();
 	}
+
+    /**
+     * Get data
+     *
+     * @return void
+     */
+    public function getData()
+    {
+        // get dimensions
+        $this->slideWidth = (int) BackendModel::getModuleSetting('slideshows', 'slide_width', null);
+        $this->slideHeight = (int) BackendModel::getModuleSetting('slideshows', 'slide_height', null);
+    }
 
 	/**
 	 * Load the form
@@ -50,6 +70,19 @@ class BackendSlideshowsAddSlide extends BackendBaseActionAdd
 	protected function parse()
 	{
 		parent::parse();
+
+        // help text
+        $helpImageDimensions = '';
+        if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
+        }
+        elseif ($this->slideWidth !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsWidth'), $this->slideWidth);
+        }
+        elseif ($this->slideHeight !== 0) {
+            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsHeight'), $this->slideHeight);
+        }
+        $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
 	}
 
 	/**
@@ -65,7 +98,24 @@ class BackendSlideshowsAddSlide extends BackendBaseActionAdd
 
 			// validate fields
 			$this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
-			$this->frm->getField('image')->isFilled(BL::err('FieldIsRequired'));
+			if ($this->frm->getField('image')->isFilled(BL::err('FieldIsRequired'))) {
+                // check dimensions
+                if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
+                    if ($this->frm->getField('image')->getWidth() != $this->slideWidth && $this->frm->getField('image')->getHeight() != $this->slideHeight) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongDimensions'), $this->slideWidth, $this->slideHeight));
+                    }
+                }
+                elseif ($this->slideWidth !== 0) {
+                    if ($this->frm->getField('image')->getWidth() != $this->slideWidth) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongWidth'), $this->slideWidth));
+                    }
+                }
+                elseif ($this->slideHeight !== 0) {
+                    if ($this->frm->getField('image')->getHeight() != $this->slideHeight) {
+                        $this->frm->getField('image')->addError(sprintf(BL::err('WrongHeight'), $this->slideHeight));
+                    }
+                }
+            }
 
 			// no errors?
 			if($this->frm->isCorrect())

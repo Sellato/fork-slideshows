@@ -50,5 +50,8 @@ class SlideshowsInstaller extends ModuleInstaller
 		// set navigation
 		$navigationModulesId = $this->setNavigation(null, 'Modules');
         $this->setNavigation($navigationModulesId, 'Slideshows', 'slideshows/index', array('slideshows/add', 'slideshows/add_slide', 'slideshows/edit', 'slideshows/edit_slide'));
+        $navigationSettingsId = $this->setNavigation(null, 'Settings');
+        $navigationModulesSettingsId = $this->setNavigation($navigationSettingsId, 'Modules');
+        $this->setNavigation($navigationModulesSettingsId, 'Slideshows', 'slideshows/settings');
 	}
 }
