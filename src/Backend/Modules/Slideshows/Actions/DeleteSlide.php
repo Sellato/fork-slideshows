@@ -46,10 +46,8 @@ class DeleteSlide extends BackendBaseActionDelete
             $redirectURL .= '&id=' . $this->record['slideshow_id'];
             $redirectURL .= '&report=deleted&var=' . urlencode($this->record['title']);
             $this->redirect($redirectURL);
-        }
-
-        // no item found, redirect to the overview with an error
-        else {
+        } else {
+            // no item found, redirect to the overview with an error
             $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
         }
     }

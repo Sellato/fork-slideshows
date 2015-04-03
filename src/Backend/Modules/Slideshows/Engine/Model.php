@@ -30,7 +30,7 @@ class Model
     /**
      * Deletes one or more items
      *
-     * @param mixed $ids The ids to delete.
+     * @param mixed $id The id to delete.
      */
     public static function delete($id)
     {

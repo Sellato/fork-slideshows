@@ -64,8 +64,8 @@ class Edit extends BackendBaseActionEdit
              FROM slideshows_slides
              WHERE slideshow_id = ?
              ORDER BY sequence',
-             array($this->id)
-         );
+            array($this->id)
+        );
         $imagesDatagrid->enableSequenceByDragAndDrop();
         $imagesDatagrid->addColumn(
             'edit',

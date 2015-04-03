@@ -93,8 +93,8 @@ class Add extends BackendBaseActionAdd
 
                 if (is_null($extra['sequence'])) {
                     $extra['sequence'] = BackendModel::getContainer()->get('database')->getVar(
-                         'SELECT CEILING(MAX(i.sequence) / 1000) * 1000
-                          FROM modules_extras AS i'
+                        'SELECT CEILING(MAX(i.sequence) / 1000) * 1000
+                         FROM modules_extras AS i'
                     );
                 }
 

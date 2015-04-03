@@ -121,16 +121,15 @@ class AddSlide extends BackendBaseActionAdd
                 // check dimensions
                 if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
                     if ($fileImage->getWidth() != $this->slideWidth && $fileImage->getHeight() != $this->slideHeight) {
-                        $fileImage->addError(sprintf(BL::err('WrongDimensions'), $this->slideWidth,
-                            $this->slideHeight));
+                        $fileImage->addError(
+                            sprintf(BL::err('WrongDimensions'), $this->slideWidth,$this->slideHeight)
+                        );
                     }
-                }
-                elseif ($this->slideWidth !== 0) {
+                } elseif ($this->slideWidth !== 0) {
                     if ($fileImage->getWidth() != $this->slideWidth) {
                         $fileImage->addError(sprintf(BL::err('WrongWidth'), $this->slideWidth));
                     }
-                }
-                elseif ($this->slideHeight !== 0) {
+                } elseif ($this->slideHeight !== 0) {
                     if ($fileImage->getHeight() != $this->slideHeight) {
                         $fileImage->addError(sprintf(BL::err('WrongHeight'), $this->slideHeight));
                     }
