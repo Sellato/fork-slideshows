@@ -54,6 +54,9 @@ class Installer extends ModuleInstaller
             'slideshows/index',
             array('slideshows/add', 'slideshows/add_slide', 'slideshows/edit', 'slideshows/edit_slide')
         );
+        $navigationSettingsId = $this->setNavigation(null, 'Settings');
+        $navigationModulesSettingsId = $this->setNavigation($navigationSettingsId, 'Modules');
+        $this->setNavigation($navigationModulesSettingsId, 'Slideshows', 'slideshows/settings');
 
         // create folders if needed
         $imagePath = FRONTEND_FILES_PATH . '/Slideshows';
