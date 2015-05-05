@@ -21,6 +21,7 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  *
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
+ * @author Jelmer Prins <jelmer@sumocoders.be>
  */
 class EditSlide extends BackendBaseActionEdit
 {
@@ -167,7 +168,10 @@ class EditSlide extends BackendBaseActionEdit
 
                 if ($this->frm->getField('image')->isFilled()) {
                     $filename = $this->id . '_' . time() . '.' . $this->frm->getField('image')->getExtension();
-                    $this->frm->getField('image')->generateThumbnails(FRONTEND_FILES_PATH . '/slideshows/', $filename);
+                    $this->frm->getField('image')->generateThumbnails(
+                        FRONTEND_FILES_PATH . BackendSlideshowsModel::IMAGE_FOLDER,
+                        $filename
+                    );
                     $item['image'] = $filename;
                 }
 

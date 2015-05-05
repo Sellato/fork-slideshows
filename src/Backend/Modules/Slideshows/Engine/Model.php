@@ -20,12 +20,15 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
+ * @author Jelmer Prins <jelmer@sumocoders.be>
  */
 class Model
 {
     const QRY_BROWSE = 'SELECT i.id, i.title, UNIX_TIMESTAMP(i.created_on) AS created_on
                         FROM slideshows AS i
                         WHERE i.language = ?';
+
+    const IMAGE_FOLDER = '/Slideshows/';
 
     /**
      * Deletes one or more items
@@ -52,6 +55,10 @@ class Model
      */
     public static function deleteSlide($id)
     {
+        // get the slide so we can delete the image
+        $slide = self::getSlide($id);
+        BackendModel::deleteThumbnails(FRONTEND_FILES_PATH . self::IMAGE_FOLDER, $slide['image']);
+
         // get db
         $db = BackendModel::getContainer()->get('database');
 
@@ -101,9 +108,9 @@ class Model
     {
         $fs = new Filesystem();
         $finder = new Finder();
-        $folderPath = FRONTEND_FILES_PATH . '/slideshows';
+        $folderPath = FRONTEND_FILES_PATH . self::IMAGE_FOLDER;
 
-        if ($fs->exists($folderPath . '/source/' . $filename)) {
+        if ($fs->exists($folderPath . 'source/' . $filename)) {
             $sizes = $finder->directories()->in($folderPath)->exclude('source');
             foreach ($sizes as $size) {
                 /** @var SplFileInfo $size */
@@ -115,12 +122,12 @@ class Model
                     $sizeChunks[1] = null;
                 }
 
-                $thumb = new \SpoonThumbnail($folderPath . '/source/' . $filename, $sizeChunks[0], $sizeChunks[1]);
+                $thumb = new \SpoonThumbnail($folderPath . 'source/' . $filename, $sizeChunks[0], $sizeChunks[1]);
                 if ($sizeChunks[0] === null && $sizeChunks[1] === 0) {
                     $thumb->setForceOriginalAspectRatio(false);
                 }
                 $thumb->setStrict(false);
-                $thumb->parseToFile($folderPath . '/' . $size->getBasename() . '/' . $filename);
+                $thumb->parseToFile($folderPath . $size->getBasename() . '/' . $filename);
             }
         }
     }
@@ -160,7 +167,7 @@ class Model
             return array();
         }
 
-        $data['image_preview'] = FRONTEND_FILES_URL . '/slideshows/100x/' . $data['image'];
+        $data['image_preview'] = FRONTEND_FILES_URL . BackendSlideshowsModel::IMAGE_FOLDER . '100x/' . $data['image'];
 
         return $data;
     }
