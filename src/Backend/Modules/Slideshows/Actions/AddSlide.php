@@ -21,6 +21,7 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  *
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
+ * @author Jelmer Prins <jelmer@sumocoders.be>
  */
 class AddSlide extends BackendBaseActionAdd
 {
@@ -146,7 +147,7 @@ class AddSlide extends BackendBaseActionAdd
                 $item['created_on'] = BackendModel::getUTCDate();
                 $item['link'] = $this->frm->getField('link')->getValue();
                 $filename = $slideshowId . '_' . time() . '.' . $fileImage->getExtension();
-                $fileImage->generateThumbnails(FRONTEND_FILES_PATH . '/slideshows/', $filename);
+                $fileImage->generateThumbnails(FRONTEND_FILES_PATH . BackendSlideshowsModel::IMAGE_FOLDER, $filename);
 
                 $item['image'] = $filename;
                 $lastSequence = BackendModel::getContainer()->get('database')->getVar(

@@ -21,6 +21,7 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  *
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
+ * @author Jelmer Prins <jelmer@sumocoders.be>
  */
 class Edit extends BackendBaseActionEdit
 {
@@ -110,7 +111,7 @@ class Edit extends BackendBaseActionEdit
      */
     public static function generatePreview($var)
     {
-        return '<img src="' . FRONTEND_FILES_URL . '/slideshows/100x/' . $var . '" />';
+        return '<img src="' . FRONTEND_FILES_URL . BackendSlideshowsModel::IMAGE_FOLDER . '100x/' . $var . '" />';
     }
 
     /**

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `slideshows` (
   `created_on` datetime NOT NULL,
   `extra_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 
 CREATE TABLE IF NOT EXISTS `slideshows_slides` (
@@ -17,5 +17,5 @@ CREATE TABLE IF NOT EXISTS `slideshows_slides` (
   `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sequence` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 

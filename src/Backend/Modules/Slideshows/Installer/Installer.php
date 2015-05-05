@@ -10,6 +10,7 @@ namespace Backend\Modules\Slideshows\Installer;
  */
 
 use Backend\Core\Installer\ModuleInstaller;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Installer for the slideshow module
@@ -56,5 +57,19 @@ class Installer extends ModuleInstaller
         $navigationSettingsId = $this->setNavigation(null, 'Settings');
         $navigationModulesSettingsId = $this->setNavigation($navigationSettingsId, 'Modules');
         $this->setNavigation($navigationModulesSettingsId, 'Slideshows', 'slideshows/settings');
+
+        // create folders if needed
+        $imagePath = FRONTEND_FILES_PATH . '/Slideshows';
+        $gitIgnore = '*' . PHP_EOL . '!.gitignore';
+        $fs = new Filesystem();
+
+        if (!$fs->exists($imagePath . '/source')) {
+            $fs->mkdir($imagePath . '/source');
+            $fs->dumpFile($imagePath . '/source/.gitignore', $gitIgnore);
+        }
+        if (!$fs->exists($imagePath . '/100x')) {
+            $fs->mkdir($imagePath . '/100x');
+            $fs->dumpFile($imagePath . '/100x/.gitignore', $gitIgnore);
+        }
     }
 }
