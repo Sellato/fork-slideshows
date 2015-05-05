@@ -167,7 +167,7 @@ class Model
             return array();
         }
 
-        $data['image_preview'] = FRONTEND_FILES_URL . BackendSlideshowsModel::IMAGE_FOLDER . '100x/' . $data['image'];
+        $data['image_preview'] = FRONTEND_FILES_URL . self::IMAGE_FOLDER . '100x/' . $data['image'];
 
         return $data;
     }
