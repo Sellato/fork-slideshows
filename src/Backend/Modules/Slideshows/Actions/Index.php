@@ -50,7 +50,6 @@ class Index extends BackendBaseActionIndex
             'created_on',
             true
         );
-        $this->dataGrid->addColumn('date', null, BL::lbl('Date'), '[created_on]');
         $this->dataGrid->addColumn(
             'edit',
             null,
