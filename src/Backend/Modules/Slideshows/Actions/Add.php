@@ -2,11 +2,11 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Backend\Core\Engine\Base\ActionAdd as BackendBaseActionAdd;
-use Backend\Core\Engine\Form as BackendForm;
-use Backend\Core\Engine\Language as BL;
+use Backend\Core\Engine\Base\ActionAdd;
+use Backend\Core\Engine\Form;
+use Backend\Core\Engine\Language;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
+use Backend\Modules\Slideshows\Engine\Model;
 
 /**
  * This is the add-action, it will display a form to add a new slideshow
@@ -14,46 +14,38 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
  */
-class Add extends BackendBaseActionAdd
+class Add extends ActionAdd
 {
     public function execute()
     {
         parent::execute();
-        $this->loadForm();
-        $this->validateForm();
+
+        $this->handleForm();
         $this->parse();
         $this->display();
     }
 
-    private function loadForm()
+    private function handleForm()
     {
         // create form
-        $this->frm = new BackendForm('add');
+        $this->frm = new Form('add');
 
         // create elements
-        $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
-    }
+        $txtTitle = $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
 
-    protected function parse()
-    {
-        parent::parse();
-    }
-
-    private function validateForm()
-    {
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
             $this->frm->cleanupFields();
 
             // validate fields
-            $this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
+            $txtTitle->isFilled(Language::err('TitleIsRequired'));
 
             // no errors?
             if ($this->frm->isCorrect()) {
                 // build item
-                $item['language'] = BL::getWorkingLanguage();
-                $item['title'] = $this->frm->getField('title')->getValue();
+                $item['language'] = Language::getWorkingLanguage();
+                $item['title'] = $txtTitle->getValue();
                 $item['created_on'] = BackendModel::getUTCDate();
 
                 // build extra
@@ -82,7 +74,7 @@ class Add extends BackendBaseActionAdd
                 // insert extra
                 $item['extra_id'] = BackendModel::getContainer()->get('database')->insert('modules_extras', $extra);
 
-                $item['id'] = BackendSlideshowsModel::insert($item);
+                $item['id'] = Model::insert($item);
 
                 BackendModel::updateExtra(
                     $item['extra_id'],

@@ -1,3 +1,13 @@
+2.0.2 (2015-09-30)
+--
+Improvements:
+
+* Clean up code
+
+Bugfixes:
+
+* More copyright removed
+
 2.0.1 (2015-09-30)
 --
 New features:
@@ -7,12 +17,14 @@ New features:
 Improvements:
 
 * Image handling
+* Add missing info.xml
 
 Bugfixes:
 
 * Autoincrement should be 1
 * Remove date column in data grid
 * Fix class of image folder
+* Remove copyright
 
 2.0.0 (2015-04-10)
 --

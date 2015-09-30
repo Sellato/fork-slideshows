@@ -2,12 +2,11 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Backend\Core\Engine\Base\ActionEdit as BackendBaseActionEdit;
-use Backend\Core\Engine\Form as BackendForm;
-use Backend\Core\Engine\FormImage;
-use Backend\Core\Engine\Language as BL;
+use Backend\Core\Engine\Base\ActionEdit;
+use Backend\Core\Engine\Form;
+use Backend\Core\Engine\Language;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
+use Backend\Modules\Slideshows\Engine\Model;
 
 /**
  * This is the edit-action, it will display a form to edit an existing slide
@@ -16,7 +15,7 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  * @author Mathias Helin <mathias@sumocoders.be>
  * @author Jelmer Prins <jelmer@sumocoders.be>
  */
-class EditSlide extends BackendBaseActionEdit
+class EditSlide extends ActionEdit
 {
     /**
      * Slide width
@@ -34,30 +33,30 @@ class EditSlide extends BackendBaseActionEdit
 
     public function execute()
     {
+        parent::execute();
+
         // get parameters
         $this->id = $this->getParameter('id', 'int');
 
-        // does the item exist
-        if ($this->id !== null && BackendSlideshowsModel::existsSlide($this->id)) {
-            parent::execute();
-            $this->getData();
-            $this->loadForm();
-            $this->validateForm();
-            $this->parse();
-            $this->display();
-        } else {
-            // no item found, throw an exception, because somebody is fucking with our URL
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
-        }
+        $this->getData();
+        $this->handleForm();
+        $this->parse();
+        $this->display();
     }
 
     private function getData()
     {
-        $this->record = (array) BackendSlideshowsModel::getSlide($this->id);
+        $this->record = Model::getSlide($this->id);
 
         // no item found, throw an exceptions, because somebody is fucking with our URL
         if (empty($this->record)) {
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+            $redirectURL = BackendModel::createURLForAction(
+                'Index',
+                null,
+                null,
+                array('error' => 'non-existing')
+            );
+            $this->redirect($redirectURL);
         }
 
         // get dimensions
@@ -65,94 +64,85 @@ class EditSlide extends BackendBaseActionEdit
         $this->slideHeight = (int) BackendModel::getModuleSetting('Slideshows', 'slide_height', null);
     }
 
-    private function loadForm()
-    {
-        // create form
-        $this->frm = new BackendForm('edit');
-
-        // create elements
-        $this->frm->addText('title', $this->record['title'], null, 'inputText title', 'inputTextError title');
-        $this->frm->addImage('image');
-        $this->frm->addText('link', $this->record['link']);
-    }
-
     protected function parse()
     {
         // call parent
         parent::parse();
+
         // assign the active record and additional variables
         $this->tpl->assign('item', $this->record);
 
         // help text
         $helpImageDimensions = '';
         if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
         } elseif ($this->slideWidth !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsWidth'), $this->slideWidth);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsWidth'), $this->slideWidth);
         } elseif ($this->slideHeight !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsHeight'), $this->slideHeight);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsHeight'), $this->slideHeight);
         }
         $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    private function validateForm()
+    private function handleForm()
     {
+        // create form
+        $this->frm = new Form('edit');
+
+        // create elements
+        $txtTitle = $this->frm->addText(
+            'title',
+            $this->record['title'],
+            null,
+            'inputText title',
+            'inputTextError title'
+        );
+        $fileImage = $this->frm->addImage('image');
+        $txtLink = $this->frm->addText('link', $this->record['link']);
+
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
-            // get the status
-            $status = \SpoonFilter::getPostValue('status', array('active', 'draft'), 'active');
-
             // cleanup the submitted fields, ignore fields that were added by hackers
             $this->frm->cleanupFields();
 
             // validate fields
-            $this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
-
-            /** @var FormImage $fileImage */
-            $fileImage = $this->frm->getField('image');
-
-            // cleanup the submitted fields, ignore fields that were added by hackers
-            $this->frm->cleanupFields();
-
-            // validate fields
-            $this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
+            $txtTitle->isFilled(Language::err('TitleIsRequired'));
             if ($fileImage->isFilled()) {
                 // check dimensions
                 if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
                     if ($fileImage->getWidth() != $this->slideWidth && $fileImage->getHeight() != $this->slideHeight) {
                         $fileImage->addError(
-                            sprintf(BL::err('WrongDimensions'), $this->slideWidth, $this->slideHeight)
+                            sprintf(Language::err('WrongDimensions'), $this->slideWidth, $this->slideHeight)
                         );
                     }
                 } elseif ($this->slideWidth !== 0) {
                     if ($fileImage->getWidth() != $this->slideWidth) {
-                        $fileImage->addError(sprintf(BL::err('WrongWidth'), $this->slideWidth));
+                        $fileImage->addError(sprintf(Language::err('WrongWidth'), $this->slideWidth));
                     }
                 } elseif ($this->slideHeight !== 0) {
                     if ($fileImage->getHeight() != $this->slideHeight) {
-                        $fileImage->addError(sprintf(BL::err('WrongHeight'), $this->slideHeight));
+                        $fileImage->addError(sprintf(Language::err('WrongHeight'), $this->slideHeight));
                     }
                 }
             }
-
 
             // no errors?
             if ($this->frm->isCorrect()) {
                 // build item
                 $item['id'] = $this->id;
-                $item['title'] = $this->frm->getField('title')->getValue();
-                $item['link'] = $this->frm->getField('link')->getValue();
+                $item['title'] = $txtTitle->getValue();
+                $item['link'] = $txtLink->getValue();
 
-                if ($this->frm->getField('image')->isFilled()) {
-                    $filename = $this->id . '_' . time() . '.' . $this->frm->getField('image')->getExtension();
-                    $this->frm->getField('image')->generateThumbnails(
-                        FRONTEND_FILES_PATH . BackendSlideshowsModel::IMAGE_FOLDER,
+                if ($fileImage->isFilled()) {
+                    $filename = $this->id . '_' . time() . '.' . $fileImage->getExtension();
+                    $fileImage->generateThumbnails(
+                        FRONTEND_FILES_PATH . Model::IMAGE_FOLDER,
                         $filename
                     );
                     $item['image'] = $filename;
                 }
 
-                BackendSlideshowsModel::updateSlide($item);
+                Model::updateSlide($item);
 
                 // everything is saved, so redirect to the overview
                 $redirectURL = BackendModel::createURLForAction('Edit');

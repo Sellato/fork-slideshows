@@ -2,7 +2,7 @@
 
 namespace Backend\Modules\Slideshows\Engine;
 
-use Backend\Core\Engine\Language as BL;
+use Backend\Core\Engine\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -26,7 +26,7 @@ class Model
     /**
      * Deletes one or more items
      *
-     * @param mixed $id The id to delete.
+     * @param int $id The id to delete.
      */
     public static function delete($id)
     {
@@ -38,13 +38,13 @@ class Model
 
         // delete records
         $db->delete('modules_extras', 'id = ?', array($item['extra_id']));
-        $db->delete('slideshows', 'id = ? AND language = ?', array($id, BL::getWorkingLanguage()));
+        $db->delete('slideshows', 'id = ? AND language = ?', array($id, Language::getWorkingLanguage()));
     }
 
     /**
      * Deletes one or more items
      *
-     * @param mixed $ids The ids to delete.
+     * @param int $id The id to delete.
      */
     public static function deleteSlide($id)
     {
@@ -71,7 +71,7 @@ class Model
             'SELECT i.id
              FROM slideshows AS i
              WHERE i.id = ? AND i.language = ?',
-            array((int) $id, BL::getWorkingLanguage())
+            array((int) $id, Language::getWorkingLanguage())
         );
     }
 
@@ -137,7 +137,7 @@ class Model
             'SELECT i.*, UNIX_TIMESTAMP(i.created_on) AS created_on
              FROM slideshows AS i
              WHERE i.id = ? AND i.language = ?',
-            array((int) $id, BL::getWorkingLanguage())
+            array((int) $id, Language::getWorkingLanguage())
         );
     }
 
@@ -207,5 +207,24 @@ class Model
     public static function updateSlide(array $item)
     {
         BackendModel::getContainer()->get('database')->update('slideshows_slides', $item, 'id = ?', $item['id']);
+    }
+
+    /**
+     * Get next slide sequence
+     *
+     * @param int $slideshowId
+     *
+     * @return int
+     */
+    public static function getNextSlideSequence($slideshowId)
+    {
+        $lastSequence = (int) BackendModel::getContainer()->get('database')->getVar(
+            'SELECT MAX(sequence)
+             FROM slideshows_slides
+             WHERE slideshow_id = ?',
+            array($slideshowId)
+        );
+
+        return ($lastSequence + 1);
     }
 }
