@@ -133,9 +133,17 @@ class AddSlide extends ActionAdd
                 $item['id'] = Model::insertSlide($item);
 
                 // everything is saved, so redirect to the overview
-                $redirectURL = BackendModel::createURLForAction('Edit');
-                $redirectURL .= '&id=' . $this->slideshowId . '&report=added&var=' . urlencode($item['title']);
-                $redirectURL .= '&highlight=row-' . $item['id'];
+                $redirectURL = BackendModel::createURLForAction(
+                    'Edit',
+                    null,
+                    null,
+                    array(
+                        'report' => 'added',
+                        'var' => urlencode($item['title']),
+                        'id' => $this->slideshowId,
+                        'highlight' => 'row-' . $item['id'],
+                    )
+                );
                 $this->redirect($redirectURL);
             }
         }

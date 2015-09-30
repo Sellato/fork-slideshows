@@ -27,15 +27,30 @@ class Delete extends ActionDelete
         $this->record = Model::get($this->id);
 
         if (empty($this->record)) {
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+            $redirectURL = BackendModel::createURLForAction(
+                'Index',
+                null,
+                null,
+                array(
+                    'error' => 'non-existing',
+                )
+            );
+            $this->redirect($redirectURL);
         }
 
         // delete slideshow
         Model::delete($this->id);
 
         // item was deleted, so redirect
-        $this->redirect(
-            BackendModel::createURLForAction('Index') . '&report=deleted&var=' . urlencode($this->record['title'])
+        $redirectURL = BackendModel::createURLForAction(
+            'Index',
+            null,
+            null,
+            array(
+                'report' => 'deleted',
+                'var' => urlencode($this->record['title']),
+            )
         );
+        $this->redirect($redirectURL);
     }
 }

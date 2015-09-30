@@ -27,16 +27,33 @@ class DeleteSlide extends ActionDelete
         $this->record = Model::getSlide($this->id);
 
         if (empty($this->record)) {
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+            if (empty($this->record)) {
+                $redirectURL = BackendModel::createURLForAction(
+                    'Index',
+                    null,
+                    null,
+                    array(
+                        'error' => 'non-existing',
+                    )
+                );
+                $this->redirect($redirectURL);
+            }
         }
 
         // delete slide
         Model::deleteSlide($this->id);
 
         // item was deleted, so redirect
-        $redirectURL = BackendModel::createURLForAction('Edit');
-        $redirectURL .= '&id=' . $this->record['slideshow_id'];
-        $redirectURL .= '&report=deleted&var=' . urlencode($this->record['title']);
+        $redirectURL = BackendModel::createURLForAction(
+            'Edit',
+            null,
+            null,
+            array(
+                'report' => 'deleted',
+                'var' => urlencode($this->record['title']),
+                'id' => $this->record['slideshow_id'],
+            )
+        );
         $this->redirect($redirectURL);
     }
 }

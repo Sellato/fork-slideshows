@@ -38,7 +38,13 @@ class Edit extends ActionEdit
 
         // no item found, throw an exceptions, because somebody is fucking with our URL
         if (empty($this->record)) {
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+            $redirectURL = BackendModel::createURLForAction(
+                'Index',
+                null,
+                null,
+                array('error' => 'non-existing')
+            );
+            $this->redirect($redirectURL);
         }
     }
 
@@ -116,9 +122,17 @@ class Edit extends ActionEdit
                 BackendModel::updateExtraData($this->record['extra_id'], 'extra_label', $item['title']);
 
                 // everything is saved, so redirect to the overview
-                $redirectURL = BackendModel::createURLForAction('Index');
-                $redirectURL .= '&report=edited&var=' . urlencode($item['title']);
-                $redirectURL .= '&id=' . $this->id . '&highlight=row-' . $item['id'];
+                $redirectURL = BackendModel::createURLForAction(
+                    'Index',
+                    null,
+                    null,
+                    array(
+                        'report' => 'edited',
+                        'var' => urlencode($item['title']),
+                        'id' => $this->id,
+                        'highlight' => 'row-' . $item['id'],
+                    )
+                );
                 $this->redirect($redirectURL);
 
             }

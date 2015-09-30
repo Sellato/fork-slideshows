@@ -65,11 +65,18 @@ class Add extends ActionAdd
                 );
                 BackendModel::updateExtra($item['extra_id'], 'data', serialize($extraData));
 
-                $this->redirect(
-                    BackendModel::createURLForAction('Index') . '&report=added&var=' . urlencode(
-                        $item['title']
-                    ) . '&id=' . $item['id'] . '&highlight=row-' . $item['id']
+                $redirectURL = BackendModel::createURLForAction(
+                    'Index',
+                    null,
+                    null,
+                    array(
+                        'report' => 'added',
+                        'var' => urlencode($item['title']),
+                        'id' => $item['id'],
+                        'highlight' => 'row' . $item['id'],
+                    )
                 );
+                $this->redirect($redirectURL);
             }
         }
     }

@@ -56,7 +56,15 @@ class Settings extends ActionEdit
                 BackendModel::setModuleSetting('Slideshows', 'slide_height', $txtSlideHeight->getValue());
 
                 // redirect
-                $this->redirect(BackendModel::createURLForAction() . '&report=saved');
+                $redirectURL = BackendModel::createURLForAction(
+                    null,
+                    null,
+                    null,
+                    array(
+                        'report' => 'saved',
+                    )
+                );
+                $this->redirect($redirectURL);
             }
         }
     }
