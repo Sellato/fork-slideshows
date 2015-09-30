@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <name>Slideshows</name>
+    <version>2.1.0</version>
+    <requirements>
+        <minimum_version>3.7.0</minimum_version>
+    </requirements>
+    <description>
+        <![CDATA[
+            Show slideshow on your website. Manage the slides in the backend.
+        ]]>
+    </description>
+    <authors>
+        <author>
+            <name>Jonas De Keukelaere</name>
+            <url>http://www.sumocoders.be</url>
+        </author>
+        <author>
+            <name>Jelmer Prins</name>
+            <url>http://www.sumocoders.be</url>
+        </author>
+        <author>
+            <name>Mathias Helin</name>
+            <url>http://www.sumocoders.be</url>
+        </author>
+    </authors>
+    <events>
+    </events>
+</module>
