@@ -48,41 +48,22 @@ class Add extends ActionAdd
                 $item['title'] = $txtTitle->getValue();
                 $item['created_on'] = BackendModel::getUTCDate();
 
-                // build extra
-                $extra = array(
-                    'module' => 'Slideshows',
-                    'type' => 'widget',
-                    'label' => $item['title'],
-                    'action' => 'Detail',
-                    'data' => null,
-                    'hidden' => 'N',
-                    'sequence' => BackendModel::getContainer()->get('database')->getVar(
-                        'SELECT MAX(i.sequence) + 1
-                         FROM modules_extras AS i
-                         WHERE i.module = ?',
-                        array('slideshows')
-                    )
+                // save data
+                $item['extra_id'] = BackendModel::insertExtra(
+                    'widget',
+                    $this->getModule(),
+                    'Detail',
+                    $item['title']
                 );
-
-                if (is_null($extra['sequence'])) {
-                    $extra['sequence'] = BackendModel::getContainer()->get('database')->getVar(
-                        'SELECT CEILING(MAX(i.sequence) / 1000) * 1000
-                         FROM modules_extras AS i'
-                    );
-                }
-
-                // insert extra
-                $item['extra_id'] = BackendModel::getContainer()->get('database')->insert('modules_extras', $extra);
-
                 $item['id'] = Model::insert($item);
 
-                BackendModel::updateExtra(
-                    $item['extra_id'],
-                    'data',
-                    serialize(
-                        array('id' => $item['id'], 'extra_label' => $item['title'], 'language' => $item['language'])
-                    )
+                // update extra
+                $extraData = array(
+                    'id' => $item['id'],
+                    'extra_label' => $item['title'],
+                    'language' => $item['language']
                 );
+                BackendModel::updateExtra($item['extra_id'], 'data', serialize($extraData));
 
                 $this->redirect(
                     BackendModel::createURLForAction('Index') . '&report=added&var=' . urlencode(

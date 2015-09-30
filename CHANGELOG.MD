@@ -1,8 +1,9 @@
-2.0.2 (2015-09-30)
+3.0.0 (2015-09-30)
 --
 Improvements:
 
 * Clean up code
+* Use insertExtra to create module_extra items
 
 Bugfixes:
 

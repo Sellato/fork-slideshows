@@ -50,13 +50,7 @@ class EditSlide extends ActionEdit
 
         // no item found, throw an exceptions, because somebody is fucking with our URL
         if (empty($this->record)) {
-            $redirectURL = BackendModel::createURLForAction(
-                'Index',
-                null,
-                null,
-                array('error' => 'non-existing')
-            );
-            $this->redirect($redirectURL);
+            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
         }
 
         // get dimensions
