@@ -14,9 +14,6 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  */
 class Delete extends BackendBaseActionDelete
 {
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         $this->id = $this->getParameter('id', 'int');

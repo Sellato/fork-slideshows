@@ -32,9 +32,6 @@ class EditSlide extends BackendBaseActionEdit
      */
     private $slideHeight;
 
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         // get parameters
@@ -54,10 +51,6 @@ class EditSlide extends BackendBaseActionEdit
         }
     }
 
-    /**
-     * Get the data
-     * If a revision-id was specified in the URL we load the revision and not the actual data.
-     */
     private function getData()
     {
         $this->record = (array) BackendSlideshowsModel::getSlide($this->id);
@@ -72,9 +65,6 @@ class EditSlide extends BackendBaseActionEdit
         $this->slideHeight = (int) BackendModel::getModuleSetting('Slideshows', 'slide_height', null);
     }
 
-    /**
-     * Load the form
-     */
     private function loadForm()
     {
         // create form
@@ -86,9 +76,6 @@ class EditSlide extends BackendBaseActionEdit
         $this->frm->addText('link', $this->record['link']);
     }
 
-    /**
-     * Parse the form
-     */
     protected function parse()
     {
         // call parent
@@ -108,9 +95,6 @@ class EditSlide extends BackendBaseActionEdit
         $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    /**
-     * Validate the form
-     */
     private function validateForm()
     {
         // is the form submitted?

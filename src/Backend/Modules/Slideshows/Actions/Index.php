@@ -17,9 +17,6 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  */
 class Index extends BackendBaseActionIndex
 {
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         parent::execute();
@@ -29,9 +26,6 @@ class Index extends BackendBaseActionIndex
         $this->display();
     }
 
-    /**
-     * Load the datagrid
-     */
     public function loadDataGrid()
     {
         $this->dataGrid = new BackendDataGridDB(BackendSlideshowsModel::QRY_BROWSE, BL::getWorkingLanguage());
@@ -52,9 +46,6 @@ class Index extends BackendBaseActionIndex
 
     }
 
-    /**
-     * Parse the datagrid
-     */
     protected function parse()
     {
         parent::parse();

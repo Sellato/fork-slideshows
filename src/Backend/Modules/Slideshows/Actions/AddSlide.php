@@ -32,9 +32,6 @@ class AddSlide extends BackendBaseActionAdd
      */
     private $slideHeight;
 
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         parent::execute();
@@ -51,11 +48,6 @@ class AddSlide extends BackendBaseActionAdd
         $this->display();
     }
 
-    /**
-     * Get data
-     *
-     * @return void
-     */
     public function getData()
     {
         // get dimensions
@@ -63,9 +55,6 @@ class AddSlide extends BackendBaseActionAdd
         $this->slideHeight = (int) BackendModel::getModuleSetting('Slideshows', 'slide_height', null);
     }
 
-    /**
-     * Load the form
-     */
     private function loadForm()
     {
         // create form
@@ -77,9 +66,6 @@ class AddSlide extends BackendBaseActionAdd
         $this->frm->addText('link');
     }
 
-    /**
-     * Parse the form
-     */
     protected function parse()
     {
         parent::parse();
@@ -96,9 +82,6 @@ class AddSlide extends BackendBaseActionAdd
         $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    /**
-     * Validate the form
-     */
     private function validateForm()
     {
         // is the form submitted?

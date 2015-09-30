@@ -18,9 +18,6 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  */
 class Edit extends BackendBaseActionEdit
 {
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         // get parameters
@@ -40,10 +37,6 @@ class Edit extends BackendBaseActionEdit
         }
     }
 
-    /**
-     * Get the data
-     * If a revision-id was specified in the URL we load the revision and not the actual data.
-     */
     private function getData()
     {
         $this->record = (array) BackendSlideshowsModel::get($this->id);
@@ -73,9 +66,6 @@ class Edit extends BackendBaseActionEdit
         }
     }
 
-    /**
-     * Load the form
-     */
     private function loadForm()
     {
         // create form
@@ -85,9 +75,6 @@ class Edit extends BackendBaseActionEdit
         $this->frm->addText('title', $this->record['title'], null, 'inputText title', 'inputTextError title');
     }
 
-    /**
-     * Parse the form
-     */
     protected function parse()
     {
         // call parent
@@ -107,9 +94,6 @@ class Edit extends BackendBaseActionEdit
         return '<img src="' . FRONTEND_FILES_URL . BackendSlideshowsModel::IMAGE_FOLDER . '100x/' . $var . '" />';
     }
 
-    /**
-     * Validate the form
-     */
     private function validateForm()
     {
         // is the form submitted?

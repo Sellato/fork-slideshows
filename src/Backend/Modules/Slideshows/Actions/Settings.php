@@ -15,11 +15,6 @@ use Backend\Core\Engine\Language as BL;
  */
 class Settings extends BackendBaseActionEdit
 {
-    /**
-     * Execute the action
-     *
-     * @return void
-     */
     public function execute()
     {
         parent::execute();
@@ -30,11 +25,6 @@ class Settings extends BackendBaseActionEdit
         $this->display();
     }
 
-    /**
-     * Load form
-     *
-     * @return void
-     */
     private function loadForm()
     {
         // create form
@@ -45,11 +35,6 @@ class Settings extends BackendBaseActionEdit
         $this->frm->addText('slide_height', BackendModel::getModuleSetting('Slideshows', 'slide_height', null));
     }
 
-    /**
-     * Validate form
-     *
-     * @return void
-     */
     private function validateForm()
     {
         // submitted?

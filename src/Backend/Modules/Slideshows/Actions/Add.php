@@ -16,9 +16,6 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  */
 class Add extends BackendBaseActionAdd
 {
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         parent::execute();
@@ -28,9 +25,6 @@ class Add extends BackendBaseActionAdd
         $this->display();
     }
 
-    /**
-     * Load the form
-     */
     private function loadForm()
     {
         // create form
@@ -40,17 +34,11 @@ class Add extends BackendBaseActionAdd
         $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
     }
 
-    /**
-     * Parse the form
-     */
     protected function parse()
     {
         parent::parse();
     }
 
-    /**
-     * Validate the form
-     */
     private function validateForm()
     {
         // is the form submitted?
