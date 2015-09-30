@@ -5,6 +5,7 @@ Improvements:
 * Clean up code
 * Use insertExtra to create module_extra items
 * Use createURLForAction to create redirect URL
+* Use module settings service
 
 Bugfixes:
 

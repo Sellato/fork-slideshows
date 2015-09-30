@@ -30,13 +30,14 @@ class Settings extends ActionEdit
         $this->frm = new Form('settings');
 
         // fields
+        $moduleSettings = $this->get('fork.settings');
         $txtSlideWidth = $this->frm->addText(
             'slide_width',
-            BackendModel::getModuleSetting('Slideshows', 'slide_width', null)
+            $moduleSettings->get('Slideshows', 'slide_width', null)
         );
         $txtSlideHeight = $this->frm->addText(
             'slide_height',
-            BackendModel::getModuleSetting('Slideshows', 'slide_height', null)
+            $moduleSettings->get('Slideshows', 'slide_height', null)
         );
 
         // submitted?
@@ -52,8 +53,8 @@ class Settings extends ActionEdit
             // correct?
             if ($this->frm->isCorrect()) {
                 // save
-                BackendModel::setModuleSetting('Slideshows', 'slide_width', $txtSlideWidth->getValue());
-                BackendModel::setModuleSetting('Slideshows', 'slide_height', $txtSlideHeight->getValue());
+                $moduleSettings->set('Slideshows', 'slide_width', $txtSlideWidth->getValue());
+                $moduleSettings->set('Slideshows', 'slide_height', $txtSlideHeight->getValue());
 
                 // redirect
                 $redirectURL = BackendModel::createURLForAction(

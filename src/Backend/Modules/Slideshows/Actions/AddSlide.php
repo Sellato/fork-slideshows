@@ -54,8 +54,9 @@ class AddSlide extends ActionAdd
     public function getData()
     {
         // get dimensions
-        $this->slideWidth = (int) BackendModel::getModuleSetting('Slideshows', 'slide_width', null);
-        $this->slideHeight = (int) BackendModel::getModuleSetting('Slideshows', 'slide_height', null);
+        $moduleSettings = $this->get('fork.settings');
+        $this->slideWidth = (int) $moduleSettings->get('Slideshows', 'slide_width', null);
+        $this->slideHeight = (int) $moduleSettings->get('Slideshows', 'slide_height', null);
     }
 
     protected function parse()
