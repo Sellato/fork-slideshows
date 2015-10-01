@@ -2,9 +2,9 @@
 
 namespace Frontend\Modules\Slideshows\Widgets;
 
-use Frontend\Core\Engine\Base\Widget as FrontendBaseWidget;
-use Frontend\Core\Engine\Theme as FrontendTheme;
-use Frontend\Modules\Slideshows\Engine\Model as FrontendSlideshowsModel;
+use Frontend\Core\Engine\Base\Widget;
+use Frontend\Core\Engine\Theme;
+use Frontend\Modules\Slideshows\Engine\Model;
 
 /**
  * This is a widget for a slideshow
@@ -12,7 +12,7 @@ use Frontend\Modules\Slideshows\Engine\Model as FrontendSlideshowsModel;
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
  */
-class Detail extends FrontendBaseWidget
+class Detail extends Widget
 {
     /**
      * The item.
@@ -27,8 +27,9 @@ class Detail extends FrontendBaseWidget
     public function execute()
     {
         parent::execute();
+
         $this->loadData();
-        $template = FrontendTheme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.tpl');
+        $template = Theme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.tpl');
         $this->loadTemplate($template);
         $this->parse();
     }
@@ -38,7 +39,7 @@ class Detail extends FrontendBaseWidget
      */
     private function loadData()
     {
-        $this->item = FrontendSlideshowsModel::get((int) $this->data['id']);
+        $this->item = Model::get((int) $this->data['id']);
     }
 
     /**
