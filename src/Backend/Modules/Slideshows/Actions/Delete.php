@@ -2,9 +2,9 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Backend\Core\Engine\Base\ActionDelete as BackendBaseActionDelete;
+use Backend\Core\Engine\Base\ActionDelete;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
+use Backend\Modules\Slideshows\Engine\Model;
 
 /**
  * This action will delete a slideshow
@@ -12,35 +12,45 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
  */
-class Delete extends BackendBaseActionDelete
+class Delete extends ActionDelete
 {
     /**
      * Execute the action
      */
     public function execute()
     {
+        parent::execute();
+
         $this->id = $this->getParameter('id', 'int');
 
-        // group exists and id is not null?
-        if ($this->id !== null && BackendSlideshowsModel::exists($this->id)) {
-            parent::execute();
+        // get record
+        $this->record = Model::get($this->id);
 
-            // get record
-            $this->record = BackendSlideshowsModel::get($this->id);
-
-            // delete group
-            BackendSlideshowsModel::delete($this->id);
-
-            // trigger event
-            BackendModel::triggerEvent($this->getModule(), 'after_delete', array('id' => $this->id));
-
-            // item was deleted, so redirect
-            $this->redirect(
-                BackendModel::createURLForAction('Index') . '&report=deleted&var=' . urlencode($this->record['title'])
+        if (empty($this->record)) {
+            $redirectURL = BackendModel::createURLForAction(
+                'Index',
+                null,
+                null,
+                array(
+                    'error' => 'non-existing',
+                )
             );
-        } else {
-            // no item found, redirect to the overview with an error
-            $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+            $this->redirect($redirectURL);
         }
+
+        // delete slideshow
+        Model::delete($this->id);
+
+        // item was deleted, so redirect
+        $redirectURL = BackendModel::createURLForAction(
+            'Index',
+            null,
+            null,
+            array(
+                'report' => 'deleted',
+                'var' => urlencode($this->record['title']),
+            )
+        );
+        $this->redirect($redirectURL);
     }
 }

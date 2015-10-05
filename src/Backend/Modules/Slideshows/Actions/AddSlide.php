@@ -2,12 +2,11 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Backend\Core\Engine\Base\ActionAdd as BackendBaseActionAdd;
-use Backend\Core\Engine\Form as BackendForm;
-use Backend\Core\Engine\FormImage;
-use Backend\Core\Engine\Language as BL;
+use Backend\Core\Engine\Base\ActionAdd;
+use Backend\Core\Engine\Form;
+use Backend\Core\Engine\Language;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
+use Backend\Modules\Slideshows\Engine\Model;
 
 /**
  * This is the add-action, it will display a form to add a new slide
@@ -16,8 +15,13 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  * @author Mathias Helin <mathias@sumocoders.be>
  * @author Jelmer Prins <jelmer@sumocoders.be>
  */
-class AddSlide extends BackendBaseActionAdd
+class AddSlide extends ActionAdd
 {
+    /**
+     * @var int
+     */
+    private $slideshowId;
+
     /**
      * Slide width
      *
@@ -32,54 +36,29 @@ class AddSlide extends BackendBaseActionAdd
      */
     private $slideHeight;
 
-    /**
-     * Execute the action
-     */
     public function execute()
     {
         parent::execute();
 
-        $slideshowId = \SpoonFilter::getGetValue('slideshow', null, null);
-        if ($slideshowId == null || !BackendSlideshowsModel::exists($slideshowId)) {
+        $this->slideshowId = \SpoonFilter::getGetValue('slideshow', null, null);
+        if ($this->slideshowId == null || !Model::exists($this->slideshowId)) {
             $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
         }
 
         $this->getData();
-        $this->loadForm();
-        $this->validateForm();
+        $this->handleForm();
         $this->parse();
         $this->display();
     }
 
-    /**
-     * Get data
-     *
-     * @return void
-     */
     public function getData()
     {
         // get dimensions
-        $this->slideWidth = (int) BackendModel::getModuleSetting('Slideshows', 'slide_width', null);
-        $this->slideHeight = (int) BackendModel::getModuleSetting('Slideshows', 'slide_height', null);
+        $moduleSettings = $this->get('fork.settings');
+        $this->slideWidth = (int) $moduleSettings->get('Slideshows', 'slide_width', null);
+        $this->slideHeight = (int) $moduleSettings->get('Slideshows', 'slide_height', null);
     }
 
-    /**
-     * Load the form
-     */
-    private function loadForm()
-    {
-        // create form
-        $this->frm = new BackendForm('add');
-
-        // create elements
-        $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
-        $this->frm->addImage('image');
-        $this->frm->addText('link');
-    }
-
-    /**
-     * Parse the form
-     */
     protected function parse()
     {
         parent::parse();
@@ -87,45 +66,50 @@ class AddSlide extends BackendBaseActionAdd
         // help text
         $helpImageDimensions = '';
         if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensions'), $this->slideWidth, $this->slideHeight);
         } elseif ($this->slideWidth !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsWidth'), $this->slideWidth);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsWidth'), $this->slideWidth);
         } elseif ($this->slideHeight !== 0) {
-            $helpImageDimensions = sprintf(BL::msg('HelpImageDimensionsHeight'), $this->slideHeight);
+            $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsHeight'), $this->slideHeight);
         }
         $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    /**
-     * Validate the form
-     */
-    private function validateForm()
+    private function handleForm()
     {
+        // create form
+        $this->frm = new Form('add');
+
+        // create elements
+        $txtTitle = $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
+        $fileImage = $this->frm->addImage('image');
+        $txtLink = $this->frm->addText('link');
+
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
             $this->frm->cleanupFields();
 
-            /** @var FormImage $fileImage */
-            $fileImage = $this->frm->getField('image');
-
             // validate fields
-            $this->frm->getField('title')->isFilled(BL::err('TitleIsRequired'));
-            if ($fileImage->isFilled(BL::err('FieldIsRequired'))) {
+            $txtTitle->isFilled(Language::err('TitleIsRequired'));
+            if ($fileImage->isFilled(Language::err('FieldIsRequired'))) {
                 // check dimensions
                 if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
-                    if ($fileImage->getWidth() != $this->slideWidth && $fileImage->getHeight() != $this->slideHeight) {
+                    if (
+                        $fileImage->getWidth() != $this->slideWidth
+                        && $fileImage->getHeight() != $this->slideHeight
+                    ) {
                         $fileImage->addError(
-                            sprintf(BL::err('WrongDimensions'), $this->slideWidth, $this->slideHeight)
+                            sprintf(Language::err('WrongDimensions'), $this->slideWidth, $this->slideHeight)
                         );
                     }
                 } elseif ($this->slideWidth !== 0) {
                     if ($fileImage->getWidth() != $this->slideWidth) {
-                        $fileImage->addError(sprintf(BL::err('WrongWidth'), $this->slideWidth));
+                        $fileImage->addError(sprintf(Language::err('WrongWidth'), $this->slideWidth));
                     }
                 } elseif ($this->slideHeight !== 0) {
                     if ($fileImage->getHeight() != $this->slideHeight) {
-                        $fileImage->addError(sprintf(BL::err('WrongHeight'), $this->slideHeight));
+                        $fileImage->addError(sprintf(Language::err('WrongHeight'), $this->slideHeight));
                     }
                 }
             }
@@ -134,28 +118,33 @@ class AddSlide extends BackendBaseActionAdd
             if ($this->frm->isCorrect()) {
                 $item = array();
                 // build item
-                $item['title'] = $this->frm->getField('title')->getValue();
-                $slideshowId = \SpoonFilter::getGetValue('slideshow', null, null);
-                $item['slideshow_id'] = $slideshowId;
+                $item['title'] = $txtTitle->getValue();
+                $item['slideshow_id'] = $this->slideshowId;
                 $item['created_on'] = BackendModel::getUTCDate();
-                $item['link'] = $this->frm->getField('link')->getValue();
-                $filename = $slideshowId . '_' . time() . '.' . $fileImage->getExtension();
-                $fileImage->generateThumbnails(FRONTEND_FILES_PATH . BackendSlideshowsModel::IMAGE_FOLDER, $filename);
+                $item['link'] = $txtLink->getValue();
+                $filename = $this->slideshowId . '_' . time() . '.' . $fileImage->getExtension();
+                $fileImage->generateThumbnails(
+                    FRONTEND_FILES_PATH . Model::IMAGE_FOLDER,
+                    $filename
+                );
 
                 $item['image'] = $filename;
-                $lastSequence = BackendModel::getContainer()->get('database')->getVar(
-                    'SELECT MAX(sequence)
-                     FROM slideshows_slides
-                     WHERE slideshow_id = ?',
-                    array($slideshowId)
-                );
-                $item['sequence'] = ($lastSequence == null) ? 0 : ($lastSequence + 1);
+                $item['sequence'] = Model::getNextSlideSequence($this->slideshowId);
 
-                $item['id'] = BackendSlideshowsModel::insertSlide($item);
+                $item['id'] = Model::insertSlide($item);
+
                 // everything is saved, so redirect to the overview
-                $redirectURL = BackendModel::createURLForAction('Edit');
-                $redirectURL .= '&id=' . $slideshowId . '&report=added&var=' . urlencode($item['title']);
-                $redirectURL .= '&highlight=row-' . $item['id'];
+                $redirectURL = BackendModel::createURLForAction(
+                    'Edit',
+                    null,
+                    null,
+                    array(
+                        'report' => 'added',
+                        'var' => urlencode($item['title']),
+                        'id' => $this->slideshowId,
+                        'highlight' => 'row-' . $item['id'],
+                    )
+                );
                 $this->redirect($redirectURL);
             }
         }

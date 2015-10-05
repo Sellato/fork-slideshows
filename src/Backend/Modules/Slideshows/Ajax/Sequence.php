@@ -2,15 +2,8 @@
 
 namespace Backend\Modules\Slideshows\Ajax;
 
-/*
- * This file is part of Fork CMS.
- *
- * For the full copyright and license information, please view the license
- * file that was distributed with this source code.
- */
-
-use Backend\Core\Engine\Base\AjaxAction as BackendBaseAJAXAction;
-use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
+use Backend\Core\Engine\Base\AjaxAction;
+use Backend\Modules\Slideshows\Engine\Model;
 
 /**
  * Reorder categories
@@ -18,7 +11,7 @@ use Backend\Modules\Slideshows\Engine\Model as BackendSlideshowsModel;
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
  */
-class Sequence extends BackendBaseAJAXAction
+class Sequence extends AjaxAction
 {
     /**
      * Execute the action
@@ -42,7 +35,7 @@ class Sequence extends BackendBaseAJAXAction
             $item['sequence'] = $i;
 
             // update sequence
-            BackendSlideshowsModel::updateSlide($item);
+            Model::updateSlide($item);
         }
 
         // success output

@@ -2,10 +2,10 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Backend\Core\Engine\Base\ActionEdit as BackendBaseActionEdit;
-use Backend\Core\Engine\Form as BackendForm;
+use Backend\Core\Engine\Base\ActionEdit;
+use Backend\Core\Engine\Form;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Core\Engine\Language as BL;
+use Backend\Core\Engine\Language;
 
 /**
  * This is the settings-action, it will display a form to set general slideshow settings
@@ -13,71 +13,59 @@ use Backend\Core\Engine\Language as BL;
  * @author Jonas De Keukelaere <jonas@sumocoders.be>
  * @author Mathias Helin <mathias@sumocoders.be>
  */
-class Settings extends BackendBaseActionEdit
+class Settings extends ActionEdit
 {
-    /**
-     * Execute the action
-     *
-     * @return void
-     */
     public function execute()
     {
         parent::execute();
 
-        $this->loadForm();
-        $this->validateForm();
+        $this->handleForm();
         $this->parse();
         $this->display();
     }
 
-    /**
-     * Load form
-     *
-     * @return void
-     */
-    private function loadForm()
+    private function handleForm()
     {
         // create form
-        $this->frm = new BackendForm('settings');
+        $this->frm = new Form('settings');
 
         // fields
-        $this->frm->addText('slide_width', BackendModel::getModuleSetting('Slideshows', 'slide_width', null));
-        $this->frm->addText('slide_height', BackendModel::getModuleSetting('Slideshows', 'slide_height', null));
-    }
+        $moduleSettings = $this->get('fork.settings');
+        $txtSlideWidth = $this->frm->addText(
+            'slide_width',
+            $moduleSettings->get('Slideshows', 'slide_width', null)
+        );
+        $txtSlideHeight = $this->frm->addText(
+            'slide_height',
+            $moduleSettings->get('Slideshows', 'slide_height', null)
+        );
 
-    /**
-     * Validate form
-     *
-     * @return void
-     */
-    private function validateForm()
-    {
         // submitted?
         if ($this->frm->isSubmitted()) {
             // validation
-            if ($this->frm->getField('slide_width')->isFilled()) {
-                $this->frm->getField('slide_width')->isInteger(BL::err('InvalidInteger'));
+            if ($txtSlideWidth->isFilled()) {
+                $txtSlideWidth->isInteger(Language::err('InvalidInteger'));
             }
-            if ($this->frm->getField('slide_height')->isFilled()) {
-                $this->frm->getField('slide_height')->isInteger(BL::err('InvalidInteger'));
+            if ($txtSlideHeight->isFilled()) {
+                $txtSlideHeight->isInteger(Language::err('InvalidInteger'));
             }
 
             // correct?
             if ($this->frm->isCorrect()) {
                 // save
-                BackendModel::setModuleSetting(
-                    'Slideshows',
-                    'slide_width',
-                    $this->frm->getField('slide_width')->getValue()
-                );
-                BackendModel::setModuleSetting(
-                    'Slideshows',
-                    'slide_height',
-                    $this->frm->getField('slide_height')->getValue()
-                );
+                $moduleSettings->set('Slideshows', 'slide_width', $txtSlideWidth->getValue());
+                $moduleSettings->set('Slideshows', 'slide_height', $txtSlideHeight->getValue());
 
                 // redirect
-                $this->redirect(BackendModel::createURLForAction(null, null, null, array('report' => 'saved')));
+                $redirectURL = BackendModel::createURLForAction(
+                    null,
+                    null,
+                    null,
+                    array(
+                        'report' => 'saved',
+                    )
+                );
+                $this->redirect($redirectURL);
             }
         }
     }
