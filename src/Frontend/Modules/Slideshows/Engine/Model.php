@@ -40,7 +40,7 @@ class Model
         );
 
         foreach ($return['slides'] as &$slide) {
-            $slide['image_full'] = FRONTEND_FILES_URL . '/slideshows/source/' . $slide['image'];
+            $slide['image_full'] = FRONTEND_FILES_URL . '/Slideshows/source/' . $slide['image'];
         }
 
         return $return;
