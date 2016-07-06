@@ -81,7 +81,7 @@ class AddSlide extends ActionAdd
         $this->frm = new Form('add');
 
         // create elements
-        $txtTitle = $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
+        $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
         $fileImage = $this->frm->addImage('image');
         $txtLink = $this->frm->addText('link');
 

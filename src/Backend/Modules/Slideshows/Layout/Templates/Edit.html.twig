@@ -1,0 +1,82 @@
+{% extends '/Layout/Templates/base.html.twig' %}
+
+{% block actionbar %}
+  <div class="btn-toolbar pull-right">
+    <div class="btn-group" role="group">
+      {{ macro.buttonIcon( geturl('add_slide', null, "&slideshow=#{item.id}"), 'plus-square', 'lbl.AddSlide'|trans|capitalize) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+
+  {% form edit %}
+  <div class="row fork-module-content">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label for="title" class="control-label">
+          {{ 'lbl.Title'|trans|capitalize }}
+          <abbr data-toggle="tooltip" title="{{ 'lbl.RequiredField'|trans|capitalize }}">*</abbr>
+        </label>
+        {% form_field title %} {% form_field_error title %}
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            {{ 'lbl.Images'|trans|capitalize }}
+          </h3>
+        </div>
+        <div class="panel-body">
+          {% if images %}
+            {{ images|raw }}
+          {% else %}
+            <p>{{ 'msg.NoItems'|trans|format(geturl('add_slide')|raw) }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row fork-module-actions">
+    <div class="col-md-12">
+      <div class="btn-toolbar">
+        <div class="btn-group pull-left" role="group">
+          {% if showSlideshowsDelete %}
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete">
+              <span class="fa fa-trash-o"></span>
+              {{ 'lbl.Delete'|trans|capitalize }}
+            </button>
+          {% endif %}
+        </div>
+        <div class="btn-group pull-right" role="group">
+          <button id="editButton" type="submit" name="edit" class="btn btn-primary">
+            <span class="fa fa-floppy-o"></span>{{ 'lbl.Save'|trans|capitalize }}
+          </button>
+        </div>
+      </div>
+      {% if showSlideshowsDelete %}
+        <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="{{ 'lbl.Delete'|trans|capitalize }}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <span class="modal-title h4">{{ 'lbl.Delete'|trans|capitalize }}</span>
+              </div>
+              <div class="modal-body">
+                <p>{{ 'msg.ConfirmDelete'|trans|format(item.title)|raw }}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  <span class="fa fa-times"></span>{{ 'lbl.Cancel'|trans|capitalize }}
+                </button>
+                <a href="{{ geturl('delete') }}&amp;id={{ item.id }}" class="btn btn-danger">
+                  <span class="fa fa-trash"></span>{{ 'lbl.Delete'|trans|capitalize }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endform %}
+{% endblock %}
+

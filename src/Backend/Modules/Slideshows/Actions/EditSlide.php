@@ -95,8 +95,8 @@ class EditSlide extends ActionEdit
             'title',
             $this->record['title'],
             null,
-            'inputText title',
-            'inputTextError title'
+            'form-control title',
+            'form-control danger title'
         );
         $fileImage = $this->frm->addImage('image');
         $txtLink = $this->frm->addText('link', $this->record['link']);

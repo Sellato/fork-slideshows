@@ -29,7 +29,7 @@ class Detail extends Widget
         parent::execute();
 
         $this->loadData();
-        $template = Theme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.tpl');
+        $template = Theme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.html.twig');
         $this->loadTemplate($template);
         $this->parse();
     }
