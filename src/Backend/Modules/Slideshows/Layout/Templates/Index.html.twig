@@ -1,0 +1,25 @@
+{% extends '/Layout/Templates/base.html.twig' %}
+
+{% block actionbar %}
+  <div class="btn-toolbar pull-right">
+    <div class="btn-group" role="group">
+      {{ macro.buttonIcon( geturl('add'), 'plus-square', 'lbl.Add'|trans|capitalize) }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="content-block content-block-pb">
+        <div class="table-responsive">
+          {% if dataGrid %}
+            {{ dataGrid|raw }}
+          {% else %}
+            <p>{{ 'msg.NoItems'|trans|format(geturl('add')|raw) }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -31,7 +31,7 @@ class Add extends ActionAdd
         $this->frm = new Form('add');
 
         // create elements
-        $txtTitle = $this->frm->addText('title', null, null, 'inputText title', 'inputTextError title');
+        $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
 
         // is the form submitted?
         if ($this->frm->isSubmitted()) {

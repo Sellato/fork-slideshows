@@ -99,8 +99,8 @@ class Edit extends ActionEdit
             'title',
             $this->record['title'],
             null,
-            'inputText title',
-            'inputTextError title'
+            'form-control title',
+            'form-control danger title'
         );
 
         // is the form submitted?

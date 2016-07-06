@@ -9,6 +9,11 @@
       </item>
     </Core>
     <Slideshows>
+      <item type="label" name="AddSlide">
+        <translation language="nl"><![CDATA[slide toevoegen]]></translation>
+        <translation language="en"><![CDATA[add slide]]></translation>
+        <translation language="fr"><![CDATA[ajouter une diapo]]></translation>
+      </item>
       <item type="label" name="Link">
         <translation language="nl"><![CDATA[link]]></translation>
         <translation language="en"><![CDATA[link]]></translation>
