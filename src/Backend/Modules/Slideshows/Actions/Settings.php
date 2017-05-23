@@ -5,7 +5,7 @@ namespace Backend\Modules\Slideshows\Actions;
 use Backend\Core\Engine\Base\ActionEdit;
 use Backend\Core\Engine\Form;
 use Backend\Core\Engine\Model as BackendModel;
-use Backend\Core\Engine\Language;
+use Backend\Core\Language\Language;
 
 /**
  * This is the settings-action, it will display a form to set general slideshow settings

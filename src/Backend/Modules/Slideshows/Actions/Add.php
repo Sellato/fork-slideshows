@@ -4,7 +4,7 @@ namespace Backend\Modules\Slideshows\Actions;
 
 use Backend\Core\Engine\Base\ActionAdd;
 use Backend\Core\Engine\Form;
-use Backend\Core\Engine\Language;
+use Backend\Core\Language\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Slideshows\Engine\Model;
 
