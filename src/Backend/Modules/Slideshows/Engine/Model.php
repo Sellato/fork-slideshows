@@ -2,6 +2,7 @@
 
 namespace Backend\Modules\Slideshows\Engine;
 
+use Frontend\Core\Engine\Theme;
 use Backend\Core\Engine\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Symfony\Component\Filesystem\Filesystem;
@@ -22,6 +23,8 @@ class Model
                         WHERE i.language = ?';
 
     const IMAGE_FOLDER = '/Slideshows/';
+
+    const MODULE = 'Slideshows';
 
     /**
      * Deletes one or more items
@@ -226,5 +229,28 @@ class Model
         );
 
         return ($lastSequence + 1);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPossibleTemplates()
+    {
+        $templates = array();
+        $finder = new Finder();
+        $finder->name('*.html.twig');
+        $finder->in(FRONTEND_MODULES_PATH . '/' . self::MODULE . '/Layout/Widgets');
+        // if there is a custom theme we should include the templates there also
+        if (Theme::getTheme() != 'core') {
+            $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . self::MODULE . '/Layout/Widgets';
+            if (is_dir($path)) {
+                $finder->in($path);
+            }
+        }
+        foreach ($finder->files() as $file) {
+            $templates[] = $file->getBasename();
+        }
+
+        return array_combine($templates, $templates);
     }
 }

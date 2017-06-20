@@ -35,7 +35,7 @@ class Add extends ActionAdd
         // create elements
         $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
 
-        $template = $this->frm->addDropdown('template', $this->getPossibleTemplates());
+        $template = $this->frm->addDropdown('template', Model::getPossibleTemplates());
 
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
@@ -84,28 +84,5 @@ class Add extends ActionAdd
                 $this->redirect($redirectURL);
             }
         }
-    }
-
-    /**
-     * @return array
-     */
-    private function getPossibleTemplates()
-    {
-        $templates = array();
-        $finder = new Finder();
-        $finder->name('*.html.twig');
-        $finder->in(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets');
-        // if there is a custom theme we should include the templates there also
-        if (Theme::getTheme() != 'core') {
-            $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets';
-            if (is_dir($path)) {
-                $finder->in($path);
-            }
-        }
-        foreach ($finder->files() as $file) {
-            $templates[] = $file->getBasename();
-        }
-
-        return array_combine($templates, $templates);
     }
 }
