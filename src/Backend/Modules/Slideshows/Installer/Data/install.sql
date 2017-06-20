@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `slideshows` (
   `language` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `created_on` datetime NOT NULL,
   `extra_id` int(11) NOT NULL,
+  `template` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Detail.html.twig',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 

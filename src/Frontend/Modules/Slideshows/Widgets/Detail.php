@@ -29,7 +29,7 @@ class Detail extends Widget
         parent::execute();
 
         $this->loadData();
-        $template = Theme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.html.twig');
+        $template = Theme::getPath($this->getSlideShowTemplate());
         $this->loadTemplate($template);
         $this->parse();
     }
@@ -49,5 +49,17 @@ class Detail extends Widget
     {
         // assign data
         $this->tpl->assign('slideshow', $this->item);
+    }
+
+    /**
+     * @return string
+     */
+    private function getSlideShowTemplate()
+    {
+        if (Theme::getTheme() != 'code') {
+            return FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets/' . $this->item['template'];
+        }
+
+        return FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/' . $this->item['template'];
     }
 }

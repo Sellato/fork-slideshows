@@ -2,6 +2,8 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
+use Symfony\Component\Finder\Finder;
+use Frontend\Core\Engine\Theme;
 use Backend\Core\Engine\Base\ActionEdit;
 use Backend\Core\Engine\Form;
 use Backend\Core\Engine\DataGridDB;
@@ -103,6 +105,12 @@ class Edit extends ActionEdit
             'form-control danger title'
         );
 
+        $template = $this->frm->addDropdown(
+            'template',
+            $this->getPossibleTemplates(),
+            $this->record['template']
+        );
+
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
@@ -116,6 +124,7 @@ class Edit extends ActionEdit
                 // build item
                 $item['id'] = $this->id;
                 $item['title'] = $txtTitle->getValue();
+                $item['template'] = $template->getValue();
 
                 Model::update($item);
 
@@ -137,5 +146,28 @@ class Edit extends ActionEdit
 
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossibleTemplates()
+    {
+        $templates = array();
+        $finder = new Finder();
+        $finder->name('*.html.twig');
+        $finder->in(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets');
+        // if there is a custom theme we should include the templates there also
+        if (Theme::getTheme() != 'core') {
+            $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets';
+            if (is_dir($path)) {
+                $finder->in($path);
+            }
+        }
+        foreach ($finder->files() as $file) {
+            $templates[] = $file->getBasename();
+        }
+
+        return array_combine($templates, $templates);
     }
 }

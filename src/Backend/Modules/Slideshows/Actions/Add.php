@@ -2,6 +2,8 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
+use Symfony\Component\Finder\Finder;
+use Frontend\Core\Engine\Theme;
 use Backend\Core\Engine\Base\ActionAdd;
 use Backend\Core\Engine\Form;
 use Backend\Core\Engine\Language;
@@ -33,6 +35,8 @@ class Add extends ActionAdd
         // create elements
         $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
 
+        $template = $this->frm->addDropdown('template', $this->getPossibleTemplates());
+
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
@@ -46,6 +50,7 @@ class Add extends ActionAdd
                 // build item
                 $item['language'] = Language::getWorkingLanguage();
                 $item['title'] = $txtTitle->getValue();
+                $item['template'] = $template->getValue();
                 $item['created_on'] = BackendModel::getUTCDate();
 
                 // save data
@@ -79,5 +84,28 @@ class Add extends ActionAdd
                 $this->redirect($redirectURL);
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getPossibleTemplates()
+    {
+        $templates = array();
+        $finder = new Finder();
+        $finder->name('*.html.twig');
+        $finder->in(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets');
+        // if there is a custom theme we should include the templates there also
+        if (Theme::getTheme() != 'core') {
+            $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets';
+            if (is_dir($path)) {
+                $finder->in($path);
+            }
+        }
+        foreach ($finder->files() as $file) {
+            $templates[] = $file->getBasename();
+        }
+
+        return array_combine($templates, $templates);
     }
 }
