@@ -37,7 +37,7 @@ class Add extends ActionAdd
         if (count($possibleTemplates) > 1) {
             $template = $this->frm->addDropdown(
                 'template',
-                Model::getPossibleTemplates(),
+                $possibleTemplates,
                 $this->record['template']
             );
         }
