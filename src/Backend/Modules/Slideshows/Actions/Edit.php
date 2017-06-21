@@ -2,8 +2,6 @@
 
 namespace Backend\Modules\Slideshows\Actions;
 
-use Symfony\Component\Finder\Finder;
-use Frontend\Core\Engine\Theme;
 use Backend\Core\Engine\Base\ActionEdit;
 use Backend\Core\Engine\Form;
 use Backend\Core\Engine\DataGridDB;
