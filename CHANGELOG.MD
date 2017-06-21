@@ -1,4 +1,8 @@
-3.0.0 (2015-09-30)
+3.0.1 (2017-06-21)
+--
+Fixed the previous entry in the changelog, it was never released
+
+3.0.0 (2017-06-21)
 --
 Improvements:
 
@@ -6,6 +10,11 @@ Improvements:
 * Use insertExtra to create module_extra items
 * Use createURLForAction to create redirect URL
 * Use module settings service
+* Use twig so we are now Fork 4 compatible
+
+Features:
+
+* Select a custom template for each slide
 
 Bugfixes:
 
