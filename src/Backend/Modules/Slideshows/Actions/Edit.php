@@ -131,7 +131,6 @@ class Edit extends ActionEdit
                     $item['template'] = $template->getValue();
                 }
 
-
                 Model::update($item);
 
                 BackendModel::updateExtraData($this->record['extra_id'], 'extra_label', $item['title']);
