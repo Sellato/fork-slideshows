@@ -56,10 +56,11 @@ class Detail extends Widget
      */
     private function getSlideShowTemplate()
     {
-        if (Theme::getTheme() != 'code') {
-            return FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets/' . $this->item['template'];
+        $filepath = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
+        if (Theme::getTheme() != 'core' && file_exists($filepath)) {
+            return $filepath;
         }
 
-        return FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/' . $this->item['template'];
+        return FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
     }
 }
