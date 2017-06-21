@@ -33,6 +33,15 @@ class Add extends ActionAdd
         // create elements
         $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
 
+        $possibleTemplates = Model::getPossibleTemplates();
+        if (count($possibleTemplates) > 1) {
+            $template = $this->frm->addDropdown(
+                'template',
+                $possibleTemplates,
+                $this->record['template']
+            );
+        }
+
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
@@ -46,6 +55,12 @@ class Add extends ActionAdd
                 // build item
                 $item['language'] = Language::getWorkingLanguage();
                 $item['title'] = $txtTitle->getValue();
+
+                $item['template'] = $possibleTemplates[0];
+                if (count($possibleTemplates) > 1) {
+                    $item['template'] = $template->getValue();
+                }
+
                 $item['created_on'] = BackendModel::getUTCDate();
 
                 // save data

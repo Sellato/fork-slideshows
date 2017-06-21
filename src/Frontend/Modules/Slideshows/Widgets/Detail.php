@@ -29,7 +29,7 @@ class Detail extends Widget
         parent::execute();
 
         $this->loadData();
-        $template = Theme::getPath(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets/Detail.html.twig');
+        $template = Theme::getPath($this->getSlideShowTemplate());
         $this->loadTemplate($template);
         $this->parse();
     }
@@ -49,5 +49,26 @@ class Detail extends Widget
     {
         // assign data
         $this->tpl->assign('slideshow', $this->item);
+    }
+
+    /**
+     * @return string
+     */
+    private function getSlideShowTemplate()
+    {
+        // If custom theme
+        $filepath = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
+        if (file_exists($filepath)) {
+            return $filepath;
+        }
+
+        // If default theme has template
+        $filepath = FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
+        if (file_exists($filepath)) {
+            return $filepath;
+        }
+
+        // Use default template
+        return FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/Detail.html.twig';
     }
 }
