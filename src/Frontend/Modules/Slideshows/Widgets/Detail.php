@@ -67,7 +67,7 @@ class Detail extends Widget
         if (file_exists($filepath)) {
             return $filepath;
         }
-        
+
         // Use default template
         return FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/Detail.html.twig';
     }
