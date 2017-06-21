@@ -5,7 +5,7 @@ namespace Backend\Modules\Slideshows\Actions;
 use Backend\Core\Engine\Base\ActionIndex;
 use Backend\Core\Engine\DataGridDB;
 use Backend\Core\Engine\DataGridFunctions;
-use Backend\Core\Engine\Language;
+use Backend\Core\Language\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Slideshows\Engine\Model;
 

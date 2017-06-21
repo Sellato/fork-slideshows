@@ -3,7 +3,7 @@
 namespace Backend\Modules\Slideshows\Engine;
 
 use Frontend\Core\Engine\Theme;
-use Backend\Core\Engine\Language;
+use Backend\Core\Language\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
