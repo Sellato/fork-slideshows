@@ -56,11 +56,19 @@ class Detail extends Widget
      */
     private function getSlideShowTemplate()
     {
+        // If custom theme
         $filepath = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
-        if (Theme::getTheme() != 'core' && file_exists($filepath)) {
+        if (file_exists($filepath)) {
             return $filepath;
         }
 
-        return FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
+        // If default theme has template
+        $filepath = FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];
+        if (file_exists($filepath)) {
+            return $filepath;
+        }
+        
+        // Use default template
+        return FRONTEND_MODULES_PATH . '/' . $this->getModule() . '/Layout/Widgets/Detail.html.twig';
     }
 }
