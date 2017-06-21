@@ -24,8 +24,6 @@ class Model
 
     const IMAGE_FOLDER = '/Slideshows/';
 
-    const MODULE = 'Slideshows';
-
     /**
      * Deletes one or more items
      *
@@ -239,10 +237,10 @@ class Model
         $templates = array();
         $finder = new Finder();
         $finder->name('*.html.twig');
-        $finder->in(FRONTEND_MODULES_PATH . '/' . self::MODULE . '/Layout/Widgets');
+        $finder->in(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets');
 
         // if there is a custom theme we should include the templates there also
-        $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . self::MODULE . '/Layout/Widgets';
+        $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/Slideshows/Layout/Widgets';
         if (is_dir($path)) {
             $finder->in($path);
         }
