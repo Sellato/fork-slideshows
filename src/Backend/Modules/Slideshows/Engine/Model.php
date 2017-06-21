@@ -240,13 +240,13 @@ class Model
         $finder = new Finder();
         $finder->name('*.html.twig');
         $finder->in(FRONTEND_MODULES_PATH . '/' . self::MODULE . '/Layout/Widgets');
+
         // if there is a custom theme we should include the templates there also
-        if (Theme::getTheme() != 'core') {
-            $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . self::MODULE . '/Layout/Widgets';
-            if (is_dir($path)) {
-                $finder->in($path);
-            }
+        $path = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . self::MODULE . '/Layout/Widgets';
+        if (is_dir($path)) {
+            $finder->in($path);
         }
+
         foreach ($finder->files() as $file) {
             $templates[] = $file->getBasename();
         }
