@@ -21,13 +21,15 @@
         {% form_field title %} {% form_field_error title %}
       </div>
 
-      <div class="form-group">
-        <label for="title" class="control-label">
-          {{ 'lbl.Template'|trans|capitalize }}
-          <abbr data-toggle="tooltip" title="{{ 'lbl.RequiredField'|trans|capitalize }}">*</abbr>
-        </label>
-        {% form_field template %} {% form_field_error template %}
-      </div>
+      {% if template %}
+        <div class="form-group">
+          <label for="title" class="control-label">
+            {{ 'lbl.Template'|trans|capitalize }}
+            <abbr data-toggle="tooltip" title="{{ 'lbl.RequiredField'|trans|capitalize }}">*</abbr>
+          </label>
+          {% form_field template %} {% form_field_error template %}
+        </div>
+      {% endif %}
 
       <div class="panel panel-default">
         <div class="panel-heading">

@@ -103,11 +103,14 @@ class Edit extends ActionEdit
             'form-control danger title'
         );
 
-        $template = $this->frm->addDropdown(
-            'template',
-            Model::getPossibleTemplates(),
-            $this->record['template']
-        );
+        $possibleTemplates = Model::getPossibleTemplates();
+        if (count($possibleTemplates) > 1) {
+            $template = $this->frm->addDropdown(
+                'template',
+                Model::getPossibleTemplates(),
+                $this->record['template']
+            );
+        }
 
         // is the form submitted?
         if ($this->frm->isSubmitted()) {
@@ -122,7 +125,12 @@ class Edit extends ActionEdit
                 // build item
                 $item['id'] = $this->id;
                 $item['title'] = $txtTitle->getValue();
-                $item['template'] = $template->getValue();
+
+                $item['template'] = $possibleTemplates[0];
+                if (count($possibleTemplates) > 1) {
+                    $item['template'] = $template->getValue();
+                }
+
 
                 Model::update($item);
 
