@@ -15,7 +15,7 @@ use Backend\Core\Language\Language;
  */
 class Settings extends ActionEdit
 {
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
@@ -24,24 +24,24 @@ class Settings extends ActionEdit
         $this->display();
     }
 
-    private function handleForm()
+    private function handleForm(): void
     {
         // create form
-        $this->frm = new Form('settings');
+        $this->form = new Form('settings');
 
         // fields
         $moduleSettings = $this->get('fork.settings');
-        $txtSlideWidth = $this->frm->addText(
+        $txtSlideWidth = $this->form->addText(
             'slide_width',
             $moduleSettings->get('Slideshows', 'slide_width', null)
         );
-        $txtSlideHeight = $this->frm->addText(
+        $txtSlideHeight = $this->form->addText(
             'slide_height',
             $moduleSettings->get('Slideshows', 'slide_height', null)
         );
 
         // submitted?
-        if ($this->frm->isSubmitted()) {
+        if ($this->form->isSubmitted()) {
             // validation
             if ($txtSlideWidth->isFilled()) {
                 $txtSlideWidth->isInteger(Language::err('InvalidInteger'));
@@ -51,7 +51,7 @@ class Settings extends ActionEdit
             }
 
             // correct?
-            if ($this->frm->isCorrect()) {
+            if ($this->form->isCorrect()) {
                 // save
                 $moduleSettings->set('Slideshows', 'slide_width', $txtSlideWidth->getValue());
                 $moduleSettings->set('Slideshows', 'slide_height', $txtSlideHeight->getValue());
@@ -61,9 +61,9 @@ class Settings extends ActionEdit
                     null,
                     null,
                     null,
-                    array(
+                    [
                         'report' => 'saved',
-                    )
+                    ]
                 );
                 $this->redirect($redirectURL);
             }

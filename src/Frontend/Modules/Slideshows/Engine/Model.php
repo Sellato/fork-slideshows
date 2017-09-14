@@ -12,13 +12,7 @@ use Frontend\Core\Engine\Model as FrontendModel;
  */
 class Model
 {
-    /**
-     * get
-     *
-     * @param int $id
-     * @return array
-     */
-    public static function get($id)
+    public static function get(int $id): array
     {
         $return = (array) FrontendModel::getContainer()->get('database')->getRecord(
             'SELECT *
@@ -28,7 +22,7 @@ class Model
         );
 
         if (empty($return)) {
-            return array();
+            return [];
         }
 
         $return['slides'] = (array) FrontendModel::getContainer()->get('database')->getRecords(

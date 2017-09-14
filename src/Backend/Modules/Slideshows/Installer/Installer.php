@@ -16,16 +16,16 @@ class Installer extends ModuleInstaller
     /**
      * Install the module
      */
-    public function install()
+    public function install(): void
     {
         // load install.sql
-        $this->importSQL(dirname(__FILE__) . '/Data/install.sql');
+        $this->importSQL(__DIR__ . '/Data/install.sql');
 
         // add 'slideshow' as a module
         $this->addModule('Slideshows');
 
         // import locale
-        $this->importLocale(dirname(__FILE__) . '/Data/locale.xml');
+        $this->importLocale(__DIR__ . '/Data/locale.xml');
 
         // module rights
         $this->setModuleRights(1, 'Slideshows');
@@ -45,7 +45,7 @@ class Installer extends ModuleInstaller
             $navigationModulesId,
             'Slideshows',
             'slideshows/index',
-            array('slideshows/add', 'slideshows/add_slide', 'slideshows/edit', 'slideshows/edit_slide')
+            ['slideshows/add', 'slideshows/add_slide', 'slideshows/edit', 'slideshows/edit_slide']
         );
         $navigationSettingsId = $this->setNavigation(null, 'Settings');
         $navigationModulesSettingsId = $this->setNavigation($navigationSettingsId, 'Modules');

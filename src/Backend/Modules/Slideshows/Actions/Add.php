@@ -7,6 +7,7 @@ use Backend\Core\Engine\Form;
 use Backend\Core\Language\Language;
 use Backend\Core\Engine\Model as BackendModel;
 use Backend\Modules\Slideshows\Engine\Model;
+use Common\ModuleExtraType;
 
 /**
  * This is the add-action, it will display a form to add a new slideshow
@@ -16,7 +17,7 @@ use Backend\Modules\Slideshows\Engine\Model;
  */
 class Add extends ActionAdd
 {
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
@@ -25,38 +26,37 @@ class Add extends ActionAdd
         $this->display();
     }
 
-    private function handleForm()
+    private function handleForm(): void
     {
         // create form
-        $this->frm = new Form('add');
+        $this->form = new Form('add');
 
         // create elements
-        $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
+        $txtTitle = $this->form->addText('title', null, null, 'form-control title', 'form-control danger title');
 
         $possibleTemplates = Model::getPossibleTemplates();
         if (count($possibleTemplates) > 1) {
-            $template = $this->frm->addDropdown(
+            $template = $this->form->addDropdown(
                 'template',
-                $possibleTemplates,
-                $this->record['template']
+                $possibleTemplates
             );
         }
 
         // is the form submitted?
-        if ($this->frm->isSubmitted()) {
+        if ($this->form->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
-            $this->frm->cleanupFields();
+            $this->form->cleanupFields();
 
             // validate fields
             $txtTitle->isFilled(Language::err('TitleIsRequired'));
 
             // no errors?
-            if ($this->frm->isCorrect()) {
+            if ($this->form->isCorrect()) {
                 // build item
                 $item['language'] = Language::getWorkingLanguage();
                 $item['title'] = $txtTitle->getValue();
 
-                $item['template'] = $possibleTemplates[0];
+                $item['template'] = reset($possibleTemplates);
                 if (count($possibleTemplates) > 1) {
                     $item['template'] = $template->getValue();
                 }
@@ -65,7 +65,7 @@ class Add extends ActionAdd
 
                 // save data
                 $item['extra_id'] = BackendModel::insertExtra(
-                    'widget',
+                    ModuleExtraType::widget(),
                     $this->getModule(),
                     'Detail',
                     $item['title']
@@ -73,23 +73,23 @@ class Add extends ActionAdd
                 $item['id'] = Model::insert($item);
 
                 // update extra
-                $extraData = array(
+                $extraData = [
                     'id' => $item['id'],
                     'extra_label' => $item['title'],
-                    'language' => $item['language']
-                );
+                    'language' => $item['language'],
+                ];
                 BackendModel::updateExtra($item['extra_id'], 'data', serialize($extraData));
 
-                $redirectURL = BackendModel::createURLForAction(
+                $redirectURL = BackendModel::createUrlForAction(
                     'Index',
                     null,
                     null,
-                    array(
+                    [
                         'report' => 'added',
                         'var' => urlencode($item['title']),
                         'id' => $item['id'],
                         'highlight' => 'row' . $item['id'],
-                    )
+                    ]
                 );
                 $this->redirect($redirectURL);
             }

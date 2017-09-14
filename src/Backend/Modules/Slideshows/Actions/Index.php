@@ -3,7 +3,7 @@
 namespace Backend\Modules\Slideshows\Actions;
 
 use Backend\Core\Engine\Base\ActionIndex;
-use Backend\Core\Engine\DataGridDB;
+use Backend\Core\Engine\DataGridDatabase;
 use Backend\Core\Engine\DataGridFunctions;
 use Backend\Core\Language\Language;
 use Backend\Core\Engine\Model as BackendModel;
@@ -17,7 +17,7 @@ use Backend\Modules\Slideshows\Engine\Model;
  */
 class Index extends ActionIndex
 {
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
         $this->loadDataGrid();
@@ -26,14 +26,14 @@ class Index extends ActionIndex
         $this->display();
     }
 
-    public function loadDataGrid()
+    public function loadDataGrid(): void
     {
-        $dataGrid = new DataGridDB(Model::QRY_BROWSE, Language::getWorkingLanguage());
+        $dataGrid = new DataGridDatabase(Model::QRY_BROWSE, [Language::getWorkingLanguage()]);
 
         $dataGrid->setColumnURL('title', BackendModel::createURLForAction('Edit') . '&amp;id=[id]');
         $dataGrid->setColumnFunction(
-            array(new DataGridFunctions(), 'getLongDate'),
-            array('[created_on]'),
+            [new DataGridFunctions(), 'getLongDate'],
+            ['[created_on]'],
             'created_on',
             true
         );
@@ -44,6 +44,6 @@ class Index extends ActionIndex
             BackendModel::createURLForAction('edit') . '&amp;id=[id]'
         );
 
-        $this->tpl->assign('dataGrid', (string) $dataGrid->getContent());
+        $this->template->assign('dataGrid', $dataGrid->getContent());
     }
 }

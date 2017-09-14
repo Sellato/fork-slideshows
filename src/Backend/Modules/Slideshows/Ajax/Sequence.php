@@ -4,6 +4,7 @@ namespace Backend\Modules\Slideshows\Ajax;
 
 use Backend\Core\Engine\Base\AjaxAction;
 use Backend\Modules\Slideshows\Engine\Model;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Reorder categories
@@ -16,12 +17,12 @@ class Sequence extends AjaxAction
     /**
      * Execute the action
      */
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
         // get parameters
-        $newIdSequence = trim(\SpoonFilter::getPostValue('new_id_sequence', null, '', 'string'));
+        $newIdSequence = trim($this->getRequest()->request->get('new_id_sequence', ''));
 
         // list id
         $ids = (array) explode(',', rtrim($newIdSequence, ','));
@@ -39,6 +40,6 @@ class Sequence extends AjaxAction
         }
 
         // success output
-        $this->output(self::OK, null, 'sequence updated');
+        $this->output(Response::HTTP_OK, null, 'sequence updated');
     }
 }

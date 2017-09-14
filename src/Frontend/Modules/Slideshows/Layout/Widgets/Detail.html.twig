@@ -14,6 +14,11 @@
         {% else %}
             <img src="{{ slide.image_full }}" alt="{{ slide.title }}">
         {% endif %}
+        {% if slide.text %}
+          <div class="carousel-caption">
+            {{ slide.text|raw }}
+          </div>
+        {% endif %}
       </div>
     {% endfor %}
   </div>
