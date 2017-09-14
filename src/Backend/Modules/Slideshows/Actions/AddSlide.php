@@ -43,6 +43,8 @@ class AddSlide extends ActionAdd
         $this->slideshowId = $this->getRequest()->query->getInt('slideshow');
         if ($this->slideshowId === 0 || !Model::exists($this->slideshowId)) {
             $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
+
+            return;
         }
 
         $this->getData();

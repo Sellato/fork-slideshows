@@ -57,6 +57,8 @@ class EditSlide extends ActionEdit
                 ['error' => 'non-existing']
             );
             $this->redirect($redirectURL);
+
+            return;
         }
 
         // get dimensions

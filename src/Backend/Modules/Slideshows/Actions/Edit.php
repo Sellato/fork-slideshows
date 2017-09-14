@@ -45,6 +45,8 @@ class Edit extends ActionEdit
                 ['error' => 'non-existing']
             );
             $this->redirect($redirectURL);
+
+            return;
         }
     }
 
@@ -142,6 +144,8 @@ class Edit extends ActionEdit
                     ]
                 );
                 $this->redirect($redirectURL);
+
+                return;
             }
         }
     }

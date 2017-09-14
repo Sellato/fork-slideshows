@@ -36,6 +36,8 @@ class Delete extends ActionDelete
                 ]
             );
             $this->redirect($redirectURL);
+
+            return;
         }
 
         // delete slideshow
