@@ -24,12 +24,7 @@ class Model
 
     const IMAGE_FOLDER = '/Slideshows/';
 
-    /**
-     * Deletes one or more items
-     *
-     * @param int $id The id to delete.
-     */
-    public static function delete($id)
+    public static function delete(int $id): void
     {
         // get db
         $db = BackendModel::getContainer()->get('database');
@@ -37,17 +32,17 @@ class Model
         // get item
         $item = self::get($id);
 
+        // delete the slides one by one so also all the files are deleted
+        foreach (self::getSlidesForSlideshow($id) as $slide) {
+            self::deleteSlide($slide['id']);
+        }
+
         // delete records
-        $db->delete('modules_extras', 'id = ?', array($item['extra_id']));
-        $db->delete('slideshows', 'id = ? AND language = ?', array($id, Language::getWorkingLanguage()));
+        $db->delete('modules_extras', 'id = ?', [$item['extra_id']]);
+        $db->delete('slideshows', 'id = ? AND language = ?', [$id, Language::getWorkingLanguage()]);
     }
 
-    /**
-     * Deletes one or more items
-     *
-     * @param int $id The id to delete.
-     */
-    public static function deleteSlide($id)
+    public static function deleteSlide(int $id): void
     {
         // get the slide so we can delete the image
         $slide = self::getSlide($id);
@@ -57,48 +52,30 @@ class Model
         $db = BackendModel::getContainer()->get('database');
 
         // delete records
-        $db->delete('slideshows_slides', 'id = ?', array($id));
+        $db->delete('slideshows_slides', 'id = ?', [$id]);
     }
 
-    /**
-     * Checks if an item exists
-     *
-     * @param int $id The id of the item to check for existence.
-     * @return bool
-     */
-    public static function exists($id)
+    public static function exists(int $id): bool
     {
         return (bool) BackendModel::getContainer()->get('database')->getVar(
             'SELECT i.id
              FROM slideshows AS i
              WHERE i.id = ? AND i.language = ?',
-            array((int) $id, Language::getWorkingLanguage())
+            [$id, Language::getWorkingLanguage()]
         );
     }
 
-    /**
-     * Checks if a slide exists
-     *
-     * @param int $id The id of the item to check for existence.
-     * @return bool
-     */
-    public static function existsSlide($id)
+    public static function existsSlide(int $id): bool
     {
         return (bool) BackendModel::getContainer()->get('database')->getVar(
             'SELECT i.id
              FROM slideshows_slides AS i
              WHERE i.id = ?',
-            array((int) $id)
+            [$id]
         );
     }
 
-    /**
-     * Generate thumbnails
-     *
-     * @param string $filename
-     * @return void
-     */
-    public static function generateThumbnails($filename)
+    public static function generateThumbnails(string $filename): void
     {
         $fs = new Filesystem();
         $finder = new Finder();
@@ -126,115 +103,91 @@ class Model
         }
     }
 
-    /**
-     * Get all data for a given id
-     *
-     * @param int $id The Id of the item to fetch?
-     * @return array
-     */
-    public static function get($id)
+    public static function get(int $id): array
     {
         return (array) BackendModel::getContainer()->get('database')->getRecord(
             'SELECT i.*, UNIX_TIMESTAMP(i.created_on) AS created_on
              FROM slideshows AS i
              WHERE i.id = ? AND i.language = ?',
-            array((int) $id, Language::getWorkingLanguage())
+            [$id, Language::getWorkingLanguage()]
         );
     }
 
-    /**
-     * Get all data for a given id
-     *
-     * @param int $id The Id of the item to fetch?
-     * @return array
-     */
-    public static function getSlide($id)
+    public static function getSlide(int $id): array
     {
         $data = (array) BackendModel::getContainer()->get('database')->getRecord(
             'SELECT i.*, UNIX_TIMESTAMP(i.created_on) AS created_on
              FROM slideshows_slides AS i
              WHERE i.id = ?',
-            array((int) $id)
+            [$id]
         );
 
         if (empty($data)) {
-            return array();
+            return [];
         }
 
         $data['image_preview'] = FRONTEND_FILES_URL . self::IMAGE_FOLDER . '100x/' . $data['image'];
 
         return $data;
     }
+    public static function getSlidesForSlideshow(int $id): array
+    {
+        $slides = (array) BackendModel::getContainer()->get('database')->getRecords(
+            'SELECT i.*, UNIX_TIMESTAMP(i.created_on) AS created_on
+             FROM slideshows_slides AS i
+             WHERE i.slideshow_id = ?',
+            [$id]
+        );
 
-    /**
-     * Inserts an item into the database
-     *
-     * @param array $item The data to insert.
-     * @return int
-     */
-    public static function insert(array $item)
+        if (empty($slides)) {
+            return [];
+        }
+
+        return array_map(
+            function (array $slide) {
+                $slide['image_preview'] = FRONTEND_FILES_URL . self::IMAGE_FOLDER . '100x/' . $slide['image'];
+
+                return $slide;
+            },
+            $slides
+        );
+    }
+
+    public static function insert(array $item): int
     {
         return BackendModel::getContainer()->get('database')->insert('slideshows', $item);
     }
 
-    /**
-     * Inserts a slide into the database
-     *
-     * @param array $item The data to insert.
-     * @return int
-     */
-    public static function insertSlide(array $item)
+    public static function insertSlide(array $item): int
     {
         return BackendModel::getContainer()->get('database')->insert('slideshows_slides', $item);
     }
 
-    /**
-     * Update an existing item
-     *
-     * @param array $item The new data.
-     * @return int
-     */
-    public static function update(array $item)
+    public static function update(array $item): void
     {
         BackendModel::getContainer()->get('database')->update('slideshows', $item, 'id = ?', $item['id']);
     }
 
-    /**
-     * Update an existing slide
-     *
-     * @param array $item The new data.
-     * @return int
-     */
-    public static function updateSlide(array $item)
+    public static function updateSlide(array $item): void
     {
         BackendModel::getContainer()->get('database')->update('slideshows_slides', $item, 'id = ?', $item['id']);
     }
 
-    /**
-     * Get next slide sequence
-     *
-     * @param int $slideshowId
-     *
-     * @return int
-     */
-    public static function getNextSlideSequence($slideshowId)
+    public static function getNextSlideSequence(int $slideshowId): int
     {
         $lastSequence = (int) BackendModel::getContainer()->get('database')->getVar(
             'SELECT MAX(sequence)
              FROM slideshows_slides
              WHERE slideshow_id = ?',
-            array($slideshowId)
+            [$slideshowId]
         );
 
         return ($lastSequence + 1);
     }
 
-    /**
-     * @return array
-     */
-    public static function getPossibleTemplates()
+    public static function getPossibleTemplates(): array
     {
-        $templates = array();
+        $templates = [];
         $finder = new Finder();
         $finder->name('*.html.twig');
         $finder->in(FRONTEND_MODULES_PATH . '/Slideshows/Layout/Widgets');

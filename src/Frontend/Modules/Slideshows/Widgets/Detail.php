@@ -24,7 +24,7 @@ class Detail extends Widget
     /**
      * Execute the extra
      */
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
@@ -37,7 +37,7 @@ class Detail extends Widget
     /**
      * Load the data
      */
-    private function loadData()
+    private function loadData(): void
     {
         $this->item = Model::get((int) $this->data['id']);
     }
@@ -45,16 +45,13 @@ class Detail extends Widget
     /**
      * Parse into template
      */
-    private function parse()
+    private function parse(): void
     {
         // assign data
-        $this->tpl->assign('slideshow', $this->item);
+        $this->template->assign('slideshow', $this->item);
     }
 
-    /**
-     * @return string
-     */
-    private function getSlideShowTemplate()
+    private function getSlideShowTemplate(): string
     {
         // If custom theme
         $filepath = FRONTEND_PATH . '/Themes/' . Theme::getTheme() . '/Modules/' . $this->getModule() . '/Layout/Widgets/' . $this->item['template'];

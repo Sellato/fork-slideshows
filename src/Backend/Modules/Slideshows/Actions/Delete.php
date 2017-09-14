@@ -17,11 +17,11 @@ class Delete extends ActionDelete
     /**
      * Execute the action
      */
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
-        $this->id = $this->getParameter('id', 'int');
+        $this->id = $this->getRequest()->query->getInt('id');
 
         // get record
         $this->record = Model::get($this->id);
@@ -31,9 +31,9 @@ class Delete extends ActionDelete
                 'Index',
                 null,
                 null,
-                array(
+                [
                     'error' => 'non-existing',
-                )
+                ]
             );
             $this->redirect($redirectURL);
         }
@@ -46,10 +46,10 @@ class Delete extends ActionDelete
             'Index',
             null,
             null,
-            array(
+            [
                 'report' => 'deleted',
                 'var' => urlencode($this->record['title']),
-            )
+            ]
         );
         $this->redirect($redirectURL);
     }

@@ -31,12 +31,12 @@ class EditSlide extends ActionEdit
      */
     private $slideHeight;
 
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
         // get parameters
-        $this->id = $this->getParameter('id', 'int');
+        $this->id = $this->getRequest()->query->getInt('id');
 
         $this->getData();
         $this->handleForm();
@@ -44,7 +44,7 @@ class EditSlide extends ActionEdit
         $this->display();
     }
 
-    private function getData()
+    private function getData(): void
     {
         $this->record = Model::getSlide($this->id);
 
@@ -54,7 +54,7 @@ class EditSlide extends ActionEdit
                 'Index',
                 null,
                 null,
-                array('error' => 'non-existing')
+                ['error' => 'non-existing']
             );
             $this->redirect($redirectURL);
         }
@@ -65,13 +65,13 @@ class EditSlide extends ActionEdit
         $this->slideHeight = (int) $moduleSettings->get('Slideshows', 'slide_height', null);
     }
 
-    protected function parse()
+    protected function parse(): void
     {
         // call parent
         parent::parse();
 
         // assign the active record and additional variables
-        $this->tpl->assign('item', $this->record);
+        $this->template->assign('item', $this->record);
 
         // help text
         $helpImageDimensions = '';
@@ -82,29 +82,30 @@ class EditSlide extends ActionEdit
         } elseif ($this->slideHeight !== 0) {
             $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsHeight'), $this->slideHeight);
         }
-        $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
+        $this->template->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    private function handleForm()
+    private function handleForm(): void
     {
         // create form
-        $this->frm = new Form('edit');
+        $this->form = new Form('edit');
 
         // create elements
-        $txtTitle = $this->frm->addText(
+        $txtTitle = $this->form->addText(
             'title',
             $this->record['title'],
             null,
             'form-control title',
             'form-control danger title'
         );
-        $fileImage = $this->frm->addImage('image');
-        $txtLink = $this->frm->addText('link', $this->record['link']);
+        $fileImage = $this->form->addImage('image');
+        $txtLink = $this->form->addText('link', $this->record['link']);
+        $txtText = $this->form->addEditor('text', $this->record['text']);
 
         // is the form submitted?
-        if ($this->frm->isSubmitted()) {
+        if ($this->form->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
-            $this->frm->cleanupFields();
+            $this->form->cleanupFields();
 
             // validate fields
             $txtTitle->isFilled(Language::err('TitleIsRequired'));
@@ -128,11 +129,12 @@ class EditSlide extends ActionEdit
             }
 
             // no errors?
-            if ($this->frm->isCorrect()) {
+            if ($this->form->isCorrect()) {
                 // build item
                 $item['id'] = $this->id;
                 $item['title'] = $txtTitle->getValue();
                 $item['link'] = $txtLink->getValue();
+                $item['text'] = $txtText->getValue();
 
                 if ($fileImage->isFilled()) {
                     $filename = $this->id . '_' . time() . '.' . $fileImage->getExtension();
@@ -150,12 +152,12 @@ class EditSlide extends ActionEdit
                     'Edit',
                     null,
                     null,
-                    array(
+                    [
                         'report' => 'edited',
                         'var' => urldecode($item['title']),
                         'id' => $this->record['slideshow_id'],
                         'highlight' => 'row-' . $item['id'],
-                    )
+                    ]
                 );
                 $this->redirect($redirectURL);
             }

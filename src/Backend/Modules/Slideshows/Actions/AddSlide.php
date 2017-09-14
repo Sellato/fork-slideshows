@@ -36,12 +36,12 @@ class AddSlide extends ActionAdd
      */
     private $slideHeight;
 
-    public function execute()
+    public function execute(): void
     {
         parent::execute();
 
-        $this->slideshowId = \SpoonFilter::getGetValue('slideshow', null, null);
-        if ($this->slideshowId == null || !Model::exists($this->slideshowId)) {
+        $this->slideshowId = $this->getRequest()->query->getInt('slideshow');
+        if ($this->slideshowId === 0 || !Model::exists($this->slideshowId)) {
             $this->redirect(BackendModel::createURLForAction('Index') . '&error=non-existing');
         }
 
@@ -51,7 +51,7 @@ class AddSlide extends ActionAdd
         $this->display();
     }
 
-    public function getData()
+    public function getData(): void
     {
         // get dimensions
         $moduleSettings = $this->get('fork.settings');
@@ -59,7 +59,7 @@ class AddSlide extends ActionAdd
         $this->slideHeight = (int) $moduleSettings->get('Slideshows', 'slide_height', null);
     }
 
-    protected function parse()
+    protected function parse(): void
     {
         parent::parse();
 
@@ -72,31 +72,31 @@ class AddSlide extends ActionAdd
         } elseif ($this->slideHeight !== 0) {
             $helpImageDimensions = sprintf(Language::msg('HelpImageDimensionsHeight'), $this->slideHeight);
         }
-        $this->tpl->assign('helpImageDimensions', $helpImageDimensions);
+        $this->template->assign('helpImageDimensions', $helpImageDimensions);
     }
 
-    private function handleForm()
+    private function handleForm(): void
     {
         // create form
-        $this->frm = new Form('add');
+        $this->form = new Form('add');
 
         // create elements
-        $txtTitle = $this->frm->addText('title', null, null, 'form-control title', 'form-control danger title');
-        $fileImage = $this->frm->addImage('image');
-        $txtLink = $this->frm->addText('link');
+        $txtTitle = $this->form->addText('title', null, null, 'form-control title', 'form-control danger title');
+        $fileImage = $this->form->addImage('image');
+        $txtLink = $this->form->addText('link');
+        $txtText = $this->form->addEditor('text');
 
         // is the form submitted?
-        if ($this->frm->isSubmitted()) {
+        if ($this->form->isSubmitted()) {
             // cleanup the submitted fields, ignore fields that were added by hackers
-            $this->frm->cleanupFields();
+            $this->form->cleanupFields();
 
             // validate fields
             $txtTitle->isFilled(Language::err('TitleIsRequired'));
             if ($fileImage->isFilled(Language::err('FieldIsRequired'))) {
                 // check dimensions
                 if ($this->slideWidth !== 0 && $this->slideHeight !== 0) {
-                    if (
-                        $fileImage->getWidth() != $this->slideWidth
+                    if ($fileImage->getWidth() != $this->slideWidth
                         && $fileImage->getHeight() != $this->slideHeight
                     ) {
                         $fileImage->addError(
@@ -115,13 +115,14 @@ class AddSlide extends ActionAdd
             }
 
             // no errors?
-            if ($this->frm->isCorrect()) {
-                $item = array();
+            if ($this->form->isCorrect()) {
+                $item = [];
                 // build item
                 $item['title'] = $txtTitle->getValue();
                 $item['slideshow_id'] = $this->slideshowId;
                 $item['created_on'] = BackendModel::getUTCDate();
                 $item['link'] = $txtLink->getValue();
+                $item['text'] = $txtText->getValue();
                 $filename = $this->slideshowId . '_' . time() . '.' . $fileImage->getExtension();
                 $fileImage->generateThumbnails(
                     FRONTEND_FILES_PATH . Model::IMAGE_FOLDER,
@@ -138,12 +139,12 @@ class AddSlide extends ActionAdd
                     'Edit',
                     null,
                     null,
-                    array(
+                    [
                         'report' => 'added',
                         'var' => urlencode($item['title']),
                         'id' => $this->slideshowId,
                         'highlight' => 'row-' . $item['id'],
-                    )
+                    ]
                 );
                 $this->redirect($redirectURL);
             }
