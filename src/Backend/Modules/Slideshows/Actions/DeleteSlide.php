@@ -36,6 +36,8 @@ class DeleteSlide extends ActionDelete
                 ]
             );
             $this->redirect($redirectURL);
+
+            return;
         }
 
         // delete slide

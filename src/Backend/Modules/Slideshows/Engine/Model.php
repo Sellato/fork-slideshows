@@ -130,6 +130,7 @@ class Model
 
         return $data;
     }
+
     public static function getSlidesForSlideshow(int $id): array
     {
         $slides = (array) BackendModel::getContainer()->get('database')->getRecords(
