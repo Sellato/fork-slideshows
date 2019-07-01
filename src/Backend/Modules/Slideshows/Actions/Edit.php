@@ -55,8 +55,7 @@ class Edit extends ActionEdit
         $imagesDatagrid = new DataGridDatabase(
             'SELECT id, image, title, sequence
              FROM slideshows_slides
-             WHERE slideshow_id = ?
-             ORDER BY sequence',
+             WHERE slideshow_id = ?',
             [$this->id]
         );
         $imagesDatagrid->enableSequenceByDragAndDrop();
