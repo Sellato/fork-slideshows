@@ -6,6 +6,7 @@
         <translation language="nl"><![CDATA[slideshows]]></translation>
         <translation language="en"><![CDATA[slideshows]]></translation>
         <translation language="fr"><![CDATA[slideshows]]></translation>
+        <translation language="ru"><![CDATA[Слайдшоу]]></translation>
       </item>
     </Core>
     <Slideshows>
@@ -13,61 +14,73 @@
         <translation language="nl"><![CDATA[template]]></translation>
         <translation language="en"><![CDATA[template]]></translation>
         <translation language="fr"><![CDATA[template]]></translation>
+        <translation language="ru"><![CDATA[Шаблон]]></translation>
       </item>
       <item type="label" name="AddSlide">
         <translation language="nl"><![CDATA[slide toevoegen]]></translation>
         <translation language="en"><![CDATA[add slide]]></translation>
         <translation language="fr"><![CDATA[ajouter une diapo]]></translation>
+        <translation language="ru"><![CDATA[Добавить слайд]]></translation>
       </item>
       <item type="label" name="Link">
         <translation language="nl"><![CDATA[link]]></translation>
         <translation language="en"><![CDATA[link]]></translation>
         <translation language="fr"><![CDATA[lien]]></translation>
+        <translation language="ru"><![CDATA[Добавить ссылку]]></translation>
       </item>
       <item type="label" name="Slides">
         <translation language="nl"><![CDATA[slides]]></translation>
         <translation language="en"><![CDATA[slides]]></translation>
         <translation language="fr"><![CDATA[diapositives]]></translation>
+        <translation language="ru"><![CDATA[Слайды]]></translation>
       </item>
       <item type="label" name="SlideWidth">
         <translation language="nl"><![CDATA[slide breedte]]></translation>
         <translation language="en"><![CDATA[slide width]]></translation>
         <translation language="fr"><![CDATA[largeur de diapositive]]></translation>
+        <translation language="ru"><![CDATA[Ширина слайда]]></translation>
       </item>
       <item type="label" name="SlideHeight">
         <translation language="nl"><![CDATA[slide hoogte]]></translation>
         <translation language="en"><![CDATA[slide height]]></translation>
         <translation language="fr"><![CDATA[hauteur de diapositive]]></translation>
+        <translation language="ru"><![CDATA[Высота слайда]]></translation>
       </item>
       <item type="error" name="WrongDimensions">
         <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde dimensies, moet %1$sx%2$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image has the wrong dimensions, should be %1$sx%2$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image a de mauvaises dimensions, devrait être %1$sx%2$spx.]]></translation>
+        <translation language="ru"><![CDATA[Вы задали неверные размеры, правильные размеры %1$sx%2$spx.]]></translation>
       </item>
       <item type="error" name="WrongWidth">
         <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde breedte, moet %1$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image has the wrong width, should be %1$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image a la mauvaise largeur, devrait être %1$spx.]]></translation>
+        <translation language="ru"><![CDATA[Неверная ширина слайда, должно быть %1$spx.]]></translation>
       </item>
       <item type="error" name="WrongHeight">
         <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde hoogte, moet %1$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image has the wrong height, should be %1$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image a la mauvaise hauteur, devrait être %1$spx.]]></translation>
+        <translation language="ru"><![CDATA[Неверная высота слайда, должно быть %1$spx.]]></translation>
       </item>
       <item type="message" name="HelpImageDimensions">
         <translation language="nl"><![CDATA[De afbeelding moet %1$sx%2$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image should be %1$sx%2$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image doit être %1$sx%2$spx.]]></translation>
+        <translation language="ru"><![CDATA[Правильные размеры изображения %1$sx%2$spx.]]></translation>
       </item>
       <item type="message" name="HelpImageDimensionsWidth">
         <translation language="nl"><![CDATA[De afbeelding moet %1$spx breed zijn.]]></translation>
         <translation language="en"><![CDATA[The image should be %1$spx wide.]]></translation>
         <translation language="fr"><![CDATA[L'image doit être %1$spx de large.]]></translation>
+        <translation language="ru"><![CDATA[Ширина имиджа должна быть %1$spx.]]></translation>
       </item>
       <item type="message" name="HelpImageDimensionsHeight">
         <translation language="nl"><![CDATA[De afbeelding moet %1$spx hoog zijn.]]></translation>
         <translation language="en"><![CDATA[The image should be %1$spx high.]]></translation>
         <translation language="fr"><![CDATA[L'image doit être %1$spx haut.]]></translation>
+        <translation language="ru"><![CDATA[Высота имиджа должна быть %1$spx.]]></translation>
       </item>
     </Slideshows>
   </Backend>
