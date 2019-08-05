@@ -56,13 +56,13 @@
         <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde breedte, moet %1$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image has the wrong width, should be %1$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image a la mauvaise largeur, devrait être %1$spx.]]></translation>
-        <translation language="ru"><![CDATA[Неверная ширина слайда, должно быть %1$spx.]]></translation>
+        <translation language="ru"><![CDATA[Неверная ширина, должно быть %1$spx.]]></translation>
       </item>
       <item type="error" name="WrongHeight">
         <translation language="nl"><![CDATA[De afbeelding heeft de verkeerde hoogte, moet %1$spx zijn.]]></translation>
         <translation language="en"><![CDATA[The image has the wrong height, should be %1$spx.]]></translation>
         <translation language="fr"><![CDATA[L'image a la mauvaise hauteur, devrait être %1$spx.]]></translation>
-        <translation language="ru"><![CDATA[Неверная высота слайда, должно быть %1$spx.]]></translation>
+        <translation language="ru"><![CDATA[Неверная высота, должно быть %1$spx.]]></translation>
       </item>
       <item type="message" name="HelpImageDimensions">
         <translation language="nl"><![CDATA[De afbeelding moet %1$sx%2$spx zijn.]]></translation>
